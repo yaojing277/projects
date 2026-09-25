@@ -220,7 +220,7 @@ async function run() {
   if (raw) qs.set("raw", "1");
   history.replaceState(null, "", "?" + qs);
   document.body.classList.add("loading");
-  if (!document.querySelector(".card")) $("out").innerHTML = `<div class="msg">計算中…（第一次約需下載 3 MB 資料，之後會快取）</div>`;
+  if (!document.querySelector(".card")) $("out").innerHTML = `<div class="msg">計算中…（第一次約需下載 1 MB 資料，之後會快取）</div>`;
   try {
     const s = await analyze(code, start, end, raw, edges);
     let cmp = null;
