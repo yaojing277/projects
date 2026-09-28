@@ -288,7 +288,7 @@
     <h1>Jimmy 專案總覽</h1>
     <p>個人開發專案、工具程式與自動化腳本</p>
   </div>
-  <div class="last-updated" id="lastUpdated">最後更新：2026-09-26</div>
+  <div class="last-updated" id="lastUpdated">最後更新：2026-09-29</div>
 </header>
 
 <!-- ═══════════════════════════════════════
@@ -778,7 +778,7 @@
         <div class="card-icon">🎬</div>
         <div class="card-meta">
           <div class="card-name">YouTube 影片 AI 摘要</div>
-          <div class="card-sub">貼網址 / 頻道自動監控 → AI 重點摘要 · v2.0</div>
+          <div class="card-sub">貼網址 / 頻道自動監控 → AI 重點摘要 · v2.1</div>
         </div>
         <span class="dot"></span>
       </div>
@@ -792,6 +792,7 @@
         貼上 YouTube 網址，自動抓字幕（zh-TW 人工字幕優先、退到自動字幕，
         <b>無字幕自動 Whisper 語音轉錄</b>）→ <b>claude CLI</b> 產生結構化摘要 →
         深色 HTML 摘要頁：一句話總結、重點清單、<b>可點跳轉的時間戳章節</b>、金句與適合誰看。
+        字幕與轉錄結果會<b>快取</b>，摘要中斷重跑免再等一次 Whisper。
         另可 <b>yt_auto_summary.py</b> 一鍵檢查三個頻道新片、自動摘要＋部署＋LINE 推播。
       </div>
       <table class="sub-table">
@@ -812,6 +813,7 @@
         <li class="done">claude CLI 登入並實測成功（TED、阿格力 EP134）</li>
         <li class="done">摘要庫部署 GitHub Pages（deploy_yt_summaries.sh 一鍵）</li>
         <li class="done">頻道新片自動摘要（yt_auto_summary.py：RSS 比對已見清單 → 摘要 → 部署 → LINE）</li>
+        <li class="done">字幕／轉錄快取（.yt_transcript_cache，不隨 deploy 上傳）</li>
         <li>本機設定 LINE 金鑰（line_secrets.json）啟用摘要推播</li>
       </ul>
       <div class="link-row">
@@ -941,6 +943,22 @@
         <tr><th>日期</th><th>異動說明</th></tr>
       </thead>
       <tbody>
+        <tr>
+          <td style="white-space:nowrap; color:var(--text3);">2026-09-26</td>
+          <td>📉 <b>每日跌幅分布查詢 v2.0 手機版上線</b>：新增 drop_stats_web.html 查詢頁（yaojing277.github.io/projects/drop/），改由每日排程抓證交所全市場收盤行情存成月檔、瀏覽器端即時計算，<b>電腦不必開機</b>；漲跌幅採官方參考價，除息與分割皆已還原（00631L 1 拆 22 已驗證）</td>
+        </tr>
+        <tr>
+          <td style="white-space:nowrap; color:var(--text3);">2026-09-16</td>
+          <td>⚖️ 三項並行：<b>lev2_balance.py</b> 阿良「正二人生資產負債表」計算引擎（三桶 β 曝險／建議配置代號／加碼梯，後因 06 分頁改回手動範本而以 LEV2BAL_ENABLED=False 停用自動重建，引擎保留可離線試算）；<b>專案總覽自動發佈</b>（publish_projects.py 隨每日排程同步 projects.html／兩份 devlog 並寫 runlog.json）；<b>金鑰檔移出版控</b>——deploy_*.sh 改讀 _load_pat.sh（環境變數 GH_PAT 或 ~/.config/gh_pat），不再內嵌明文 PAT</td>
+        </tr>
+        <tr>
+          <td style="white-space:nowrap; color:var(--text3);">2026-09-15</td>
+          <td>🗓️ 修復 ETF 除息日曆「<b>待公告</b>」金額不會自動更新的問題：投信補公告金額後，既有日曆事件會同步更新而非停留在建立當下的狀態</td>
+        </tr>
+        <tr>
+          <td style="white-space:nowrap; color:var(--text3);">2026-09-09</td>
+          <td>🎬 YouTube 摘要加入<b>字幕／轉錄快取</b>（.yt_transcript_cache）：Whisper 轉錄結果存檔，摘要步驟失敗重跑時免再等一次轉錄（一部 2 小時影片可省數分鐘）；快取放在摘要庫外，不會被 deploy 推上 GitHub</td>
+        </tr>
         <tr>
           <td style="white-space:nowrap; color:var(--text3);">2026-09-02</td>
           <td>📚 補上開發紀錄文件兩份：<b>股票自動化家族開發總表</b>（stock_automation_devlog.html，涵蓋 2026-04-12 起全系列 18 個項目，含架構總覽與三條踩坑鐵律）與 <b>Wealth OS 開發紀錄</b>（wealth_os_devlog.html，2026-07-11 起 14 個項目）；同時把「Wealth OS 資產管理自動化」補為主要專案卡片（先前只有零散工具條目）</td>
