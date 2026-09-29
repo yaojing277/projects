@@ -945,6 +945,10 @@
       <tbody>
         <tr>
           <td style="white-space:nowrap; color:var(--text3);">2026-09-30</td>
+          <td>🔁 <b>回填 9/24 禾伸堂賣出</b>：交易隔 5 天才補記，成本變化原本全落在 9/29 並與當天四筆買進抵銷成 −39,367，看不出賣出被計入。因 <code>update_wealth_os.py</code> 無法指定來源分頁（固定讀最新快照），改以 zip 手術修 <code>16_資產歷史</code> 該列再讓 <code>--full</code> 重建 <code>02_每日漲跌</code>；淨投入資金 9/24 由 0 → <b>−163,004</b>、9/29 → <b>+123,637</b>。並補上賣股實收現金（<code>12_設定</code> 現金 2,072,754 → 2,234,130），修正淨資產短計</td>
+        </tr>
+        <tr>
+          <td style="white-space:nowrap; color:var(--text3);">2026-09-30</td>
           <td>🔑 <b>排程自動發佈恢復</b>：補建 <code>PAGES_PAT</code> secret，<code>publish_projects.py</code> 的發佈步驟先前因缺金鑰而「安靜跳過」，runlog 自 09-03 起空窗；一併修好<b>停擺兩週的正二分析自動部署</b>（該步驟只認從未建立過的 GITHUB_TOKEN_LEV2，自 08-19 起每次排程都走跳過分支，leverage-etf 因此三週未更新），改為優先吃 PAGES_PAT。<b>啟用前先同步了 stock-notify 內過期的 projects.html 與 wealth_os_devlog.html</b>，避免排程把線上總覽蓋回舊版</td>
         </tr>
         <tr>
