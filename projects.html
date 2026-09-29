@@ -288,7 +288,7 @@
     <h1>Jimmy 專案總覽</h1>
     <p>個人開發專案、工具程式與自動化腳本</p>
   </div>
-  <div class="last-updated" id="lastUpdated">最後更新：2026-09-29</div>
+  <div class="last-updated" id="lastUpdated">最後更新：2026-09-30</div>
 </header>
 
 <!-- ═══════════════════════════════════════
@@ -944,8 +944,20 @@
       </thead>
       <tbody>
         <tr>
+          <td style="white-space:nowrap; color:var(--text3);">2026-09-30</td>
+          <td>🔑 <b>排程自動發佈恢復</b>：補建 <code>PAGES_PAT</code> secret，<code>publish_projects.py</code> 的發佈步驟先前因缺金鑰而「安靜跳過」，runlog 自 09-03 起空窗；一併修好<b>停擺兩週的正二分析自動部署</b>（該步驟只認從未建立過的 GITHUB_TOKEN_LEV2，自 08-19 起每次排程都走跳過分支，leverage-etf 因此三週未更新），改為優先吃 PAGES_PAT。<b>啟用前先同步了 stock-notify 內過期的 projects.html 與 wealth_os_devlog.html</b>，避免排程把線上總覽蓋回舊版</td>
+        </tr>
+        <tr>
+          <td style="white-space:nowrap; color:var(--text3);">2026-09-29</td>
+          <td>🧾 釐清<b>禾伸堂持股成本與元大 App 的落差</b>：非費用或配息問題，而是 App 用<b>先進先出</b>、試算表用<b>加權平均</b>，總成本兩邊皆 244,506 分毫不差，僅「已賣出／未賣出」的切分不同（總損益相同，只差認列時點）；決定維持加權平均。另用<b>快照差分法</b>還原「股票買賣紀錄」缺漏的 3 筆買進（以手續費 0.1425%×6折 交叉驗證），並將查得的 9,444 元短記差額留痕待查</td>
+        </tr>
+        <tr>
           <td style="white-space:nowrap; color:var(--text3);">2026-09-26</td>
           <td>📉 <b>每日跌幅分布查詢 v2.0 手機版上線</b>：新增 drop_stats_web.html 查詢頁（yaojing277.github.io/projects/drop/），改由每日排程抓證交所全市場收盤行情存成月檔、瀏覽器端即時計算，<b>電腦不必開機</b>；漲跌幅採官方參考價，除息與分割皆已還原（00631L 1 拆 22 已驗證）</td>
+        </tr>
+        <tr>
+          <td style="white-space:nowrap; color:var(--text3);">2026-09-24</td>
+          <td>📐 修正 Wealth OS <b>01_Dashboard 欄寬</b>：A 欄 65.13→14、B 欄 63.38→40（合計 128.5→54），原因是標題列為 A1:H1 跨欄合併，欄寬被誤撐到內容實際只需 9 字寬的 8 倍；zip 手術只改 <code>&lt;cols&gt;</code>，98 個元件與全部儲存格值零差異</td>
         </tr>
         <tr>
           <td style="white-space:nowrap; color:var(--text3);">2026-09-16</td>
