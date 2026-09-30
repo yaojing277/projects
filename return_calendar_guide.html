@@ -516,7 +516,8 @@
       </div>
       <p class="text-muted" style="margin-top:1rem;">
         原則只有一個：<strong>歷史資料表是唯一事實來源</strong>。其他每一層都是公式算出來的，
-        之後要更新，永遠只手動改①，②③自己會跟著動。
+        之後要更新，永遠只手動改①，②③自己會跟著動。另外，<strong>①②的日期方向要一致</strong>
+        （本手冊一律是「新到舊」），公式才能單純用相對參照對位——理由見第 01 步。
       </p>
 
       <p class="formula-label">版面順序：把最常看的東西放最上面</p>
@@ -560,23 +561,26 @@
       <p>新開一張分頁（下面公式裡先叫它「<span class="num">資產歷史</span>」，你可以換成自己的名字），欄位如下：</p>
       <div class="table-wrap">
         <table>
-          <caption>資產歷史（這張永遠由舊到新，一天一列往下加）</caption>
+          <caption>資產歷史（日期由新到舊，新的一天插在第 2 列）</caption>
           <thead><tr><th class="cellref">A</th><th class="cellref">B</th><th class="cellref">C</th><th class="cellref">D</th><th class="cellref">E</th></tr></thead>
           <tbody>
             <tr><td>日期</td><td>總市值</td><td>持有成本</td><td>未實現損益</td><td>報酬率</td></tr>
-            <tr><td class="num">2026/01/30</td><td class="num">36,300</td><td class="num">36,289</td><td class="num">=B2-C2</td><td class="num">=D2/C2</td></tr>
-            <tr><td class="num">2026/02/02</td><td class="num">35,750</td><td class="num">36,289</td><td class="num">=B3-C3</td><td class="num">=D3/C3</td></tr>
+            <tr><td class="num">2026/09/30</td><td class="num">902,950</td><td class="num">706,756</td><td class="num">=B2-C2</td><td class="num">=D2/C2</td></tr>
+            <tr><td class="num">2026/09/29</td><td class="num">887,215</td><td class="num">706,756</td><td class="num">=B3-C3</td><td class="num">=D3/C3</td></tr>
           </tbody>
         </table>
       </div>
       <p>
-        每天收盤後，往下加一列：今天的<strong>總市值</strong>跟<strong>持有成本</strong>。
-        持有成本只有在真的買賣時才會變，平常照抄前一天即可。
+        每天收盤後，<strong>在第 2 列插入一列</strong>（其他資料整批往下推），填今天的
+        <strong>總市值</strong>跟<strong>持有成本</strong>。持有成本只有在真的買賣時才會變，
+        平常照抄下面那一列即可。
       </p>
       <div class="callout">
         <span class="icon">💡</span>
-        <p><strong>這張表維持「由舊到新」不要動</strong>。等一下每日漲跌表雖然要顯示成「由新到舊」，
-        但那是用公式倒著讀出來的，原始資料照時間順序往下長最單純，也最不容易出錯。</p>
+        <p><strong>這張表也是由新到舊</strong>，跟等一下要做的每日漲跌表同一個方向。
+        兩張表方向一致有個很實際的好處：<strong>對應的列永遠差一個固定的數字</strong>
+        （本文的例子是差 23 列：每日表第 25 列 ↔ 歷史表第 2 列），所以每日表的公式可以直接寫
+        相對參照、整列往下拉就對位，不必用 INDEX 之類的函式把順序倒過來。</p>
       </div>
       <div class="callout">
         <span class="icon">💡</span>
@@ -614,35 +618,28 @@
 <div class="sheet-wrap"><div class="sheet" style="grid-template-columns:34px 92px repeat(5,minmax(74px,1fr)) 68px;min-width:640px;"><div class="ch"></div><div class="ch">A</div><div class="ch">B</div><div class="ch">C</div><div class="ch">D</div><div class="ch">E</div><div class="ch">F</div><div class="ch">G</div><div class="rh">22</div><div class="title" style="grid-column:span 7">03_國泰漲跌｜每日總市值與損益變化</div><div class="rh">23</div><div class="hdr c">日期</div><div class="hdr c">總市值</div><div class="hdr c">未實現損益</div><div class="hdr c small">單日損益<br>漲跌</div><div class="hdr c">淨投入資金</div><div class="hdr c">單日市值漲跌</div><div class="hdr c small">單日<br>報酬率</div><div class="rh">24</div><div class="agg small">累計26/01至今</div><div class="r agg">903,210</div><div class="r agg">196,454</div><div class="r agg pos">+196,183</div><div class="r agg">670,467</div><div class="r agg">+866,650</div><div class="r agg">21.7%</div><div class="rh">25</div><div class="c">2026/09/30</div><div class="r">902,950</div><div class="r">196,194</div><div class="r pos">+15,735</div><div class="r">0</div><div class="r pos">+15,735</div><div class="r pos">1.8%</div><div class="rh">26</div><div class="c">2026/09/29</div><div class="r">887,215</div><div class="r">180,459</div><div class="r neg">-13,515</div><div class="r">0</div><div class="r neg">-13,515</div><div class="r neg">-1.5%</div><div class="rh">27</div><div class="c">2026/09/24</div><div class="r">900,730</div><div class="r">193,974</div><div class="r neg">-2,480</div><div class="r">0</div><div class="r neg">-2,480</div><div class="r neg">-0.3%</div><div class="rh">⋮</div><div class="ell" style="grid-column:span 7">⋮</div><div class="rh">36</div><div class="c">2026/09/11</div><div class="r">836,040</div><div class="r">129,284</div><div class="r neg">-24,527</div><div class="r">17,872</div><div class="r neg">-6,655</div><div class="r neg">-2.9%</div><div class="rh">⋮</div><div class="ell" style="grid-column:span 7">⋮</div><div class="rh">44</div><div class="c">2026/09/01</div><div class="r">844,885</div><div class="r">156,001</div><div class="r pos">+29,490</div><div class="r">0</div><div class="r pos">+29,490</div><div class="r pos y3">3.6%</div><div class="rh">⋮</div><div class="ell" style="grid-column:span 7">⋮</div><div class="rh">183</div><div class="c">2026/01/30</div><div class="r">36,300</div><div class="r">11</div><div class=""></div><div class=""></div><div class=""></div><div class=""></div></div></div>
 <figcaption>實際畫面（03_國泰漲跌）。<b>第 24 列</b>是累計，釘在表頭正下方；<b>第 25 列</b>永遠是最新一天，往下越來越舊。9/11 那列的「淨投入資金」17,872 是當天買進的金額，所以市值只掉 6,655、損益卻掉 24,527——兩個數字會不一樣就是這個原因。9/1 的報酬率 3.6% 超過 3%，整格套上最淺的黃底。最後一列（183）是最早那一天，沒有前一天可比，D~G 自動留空。</figcaption>
 </figure>
-      <p class="formula-label">逐日列：用輔助欄把「由舊到新」倒著讀出來</p>
+      <p class="formula-label">逐日列：直接寫相對參照，整列往下拉</p>
       <p>
-        歷史表是由舊到新，這張表要由新到舊，中間需要一個換算。最好懂的做法是開一個
-        <strong>輔助欄（H 欄，可以隱藏）</strong>，先算出「這一列該讀歷史表的第幾筆」，
-        其他欄位再一律引用它。這樣整列往下拉就好，不用一列一列改公式。
+        兩張表現在同方向（都是新到舊），對應關係就固定了：<strong>每日表第 25 列 ↔ 歷史表第 2 列</strong>，
+        往下每多一列兩邊同步 +1。所以公式直接寫相對參照即可，往下拉會自己對位；
+        「前一天」就是歷史表<strong>下面</strong>那一列。
       </p>
       <div class="formula">
-<span class="muted">輔助欄（H25 往下拉；1 = 最早那一天）</span>
-H25 =COUNTA(<span class="cellname">資產歷史</span>!$A$2:$A$10000)-(ROW()-25)
-
-<span class="muted">以下 A25:G25 整列往下拉到表格最後一列即可</span>
-A25 <span class="muted">日期</span>         =IF($H25&lt;1,"",INDEX(<span class="cellname">資產歷史</span>!$A$2:$A$10000,$H25))
-B25 <span class="muted">總市值</span>       =IF($H25&lt;1,"",INDEX(<span class="cellname">資產歷史</span>!$B$2:$B$10000,$H25))
-C25 <span class="muted">未實現損益</span>   =IF($H25&lt;1,"",INDEX(<span class="cellname">資產歷史</span>!$D$2:$D$10000,$H25))
-D25 <span class="muted">單日損益漲跌</span> =IF($H25&lt;2,"",INDEX(<span class="cellname">資產歷史</span>!$D$2:$D$10000,$H25)
-                                -INDEX(<span class="cellname">資產歷史</span>!$D$2:$D$10000,$H25-1))
-E25 <span class="muted">買進金額</span>     =IF($H25&lt;2,"",INDEX(<span class="cellname">資產歷史</span>!$C$2:$C$10000,$H25)
-                                -INDEX(<span class="cellname">資產歷史</span>!$C$2:$C$10000,$H25-1))
-F25 <span class="muted">單日市值漲跌</span> =IF($H25&lt;2,"",INDEX(<span class="cellname">資產歷史</span>!$B$2:$B$10000,$H25)
-                                -INDEX(<span class="cellname">資產歷史</span>!$B$2:$B$10000,$H25-1))
-G25 <span class="muted">單日報酬率</span>   =IF(OR($H25&lt;2,INDEX(<span class="cellname">資產歷史</span>!$B$2:$B$10000,$H25-1)=0),"",
-      (INDEX(<span class="cellname">資產歷史</span>!$D$2:$D$10000,$H25)-INDEX(<span class="cellname">資產歷史</span>!$D$2:$D$10000,$H25-1))
-      /INDEX(<span class="cellname">資產歷史</span>!$B$2:$B$10000,$H25-1))</div>
+<span class="muted">第 25 列 = 歷史表第 2 列（最新一天）；A25:G25 整列往下拉到表格最後一列</span>
+<span class="muted">下面的 H 代表「資產歷史」這張分頁；A2 是這一列的那天，A3 是它的前一天</span>
+A25 <span class="muted">日期</span>         =IF(H!A2="","",H!A2)
+B25 <span class="muted">總市值</span>       =IF(H!A2="","",H!B2)
+C25 <span class="muted">未實現損益</span>   =IF(H!A2="","",H!D2)
+D25 <span class="muted">單日損益漲跌</span> =IF(OR(H!A2="",H!A3=""),"",H!D2-H!D3)
+E25 <span class="muted">買進金額</span>     =IF(OR(H!A2="",H!A3=""),"",H!C2-H!C3)
+F25 <span class="muted">單日市值漲跌</span> =IF(OR(H!A2="",H!A3=""),"",H!B2-H!B3)
+G25 <span class="muted">單日報酬率</span>   =IF(OR(H!A2="",H!A3="",H!B3=0),"",(H!D2-H!D3)/H!B3)</div>
       <div class="callout">
         <span class="icon">💡</span>
-        <p><strong>最後一列會自己處理好</strong>：拉到最底下那一列時 <span class="num">$H=1</span>
-        （最早的那一天），沒有「前一天」可以比，D~G 的 <span class="num">IF($H&lt;2,"")</span>
-        會自動讓它們留空，只留下日期／總市值／損益三個原始數字。這一列就是整張表的「起點」，
-        不用特別處理。</p>
+        <p><strong>最後一列會自己處理好</strong>：拉到最底下那一列時，它指向歷史表的最後一筆
+        （最早的那一天），而「前一天」那格（再下面一列）是空的，
+        <span class="num">IF(OR(…,H!A3=""),"")</span> 就會讓 D~G 自動留空，
+        只留下日期／總市值／損益三個原始數字。這一列就是整張表的「起點」，不用特別處理。</p>
       </div>
       <div class="callout warn">
         <span class="icon">⚠</span>
@@ -931,6 +928,11 @@ G24 <span class="muted">累計報酬率</span>     =D24/B24              <span c
           字色會一起被繼承過來，如果來源剛好是「白字配深色底」，貼到淺色底就變成看不見的白字。</p>
         </li>
         <li><span class="box"></span>
+          <p><strong>兩張表的日期方向要一致</strong>——歷史資料表跟每日漲跌表都用「新到舊」。
+          一邊升冪一邊降冪不是不能做，但每日表的公式就得改用 INDEX 之類的函式把順序倒過來，
+          往下拉還容易對錯列；方向一致時兩邊列號永遠差一個固定值，相對參照拉下去就對位。</p>
+        </li>
+        <li><span class="box"></span>
           <p><strong>同一天不要重複加列</strong>——重算就覆蓋當天那一列，不然每日漲跌表會把同一天的變化算兩次。</p>
         </li>
         <li><span class="box"></span>
@@ -962,7 +964,7 @@ G24 <span class="muted">累計報酬率</span>     =D24/B24              <span c
       <div class="step-head"><span class="step-n">08</span><h2>技術附錄</h2></div>
       <span class="eyebrow dev">FOR AUTOMATION BUILDERS</span>
       <p style="margin-top:1rem;">
-        以下 6 條規則<strong>不是</strong>給手動在 Excel／Google Sheets 介面上操作的人看的——
+        以下 8 條規則<strong>不是</strong>給手動在 Excel／Google Sheets 介面上操作的人看的——
         用滑鼠設定一次格式，它就會永久固定，不會無緣無故跑掉。這幾條是我們用
         <strong>Python 直接改 xlsx 底層檔案</strong>（解壓縮成 zip、改裡面的 XML、再重新壓縮，
         俗稱「zip 手術」）來自動化整份報表時，才會遇到的問題。如果你也是寫程式產生／維護這類
@@ -1089,6 +1091,40 @@ for cal in older_months:                         <span class="muted"># 其餘月
         <span class="num">delete="1"</span> 的隱藏軸，很容易漏掉，漏掉的話兩組數列
         會朝相反方向畫，圖會完全對不起來）。
       </p>
+      <p class="formula-label">技術規則 7：儲存順序與程式內部順序脫鉤</p>
+      <p>
+        歷史資料表要存成「新到舊」，不代表程式裡也要倒著算。最省事的做法是
+        <strong>讀進來就統一排成舊到新</strong>（程式內部一律 <span class="num">hist[0]=最早</span>），
+        只在「換算成試算表列號」那一個地方把方向倒回去。這樣一來：所有計算邏輯
+        （逐日差額、月曆分組、圖表資料）完全不用動，哪天要再翻回去也只要改那一個換算函式。
+      </p>
+      <div class="formula">
+<span class="muted"># 讀取端:不管檔案裡怎麼存,進到程式一律排成舊到新</span>
+hist.sort(key=lambda r: normalize_date(r[0]))
+
+<span class="muted"># 只有「第 idx 筆對應到第幾列」這一個函式知道儲存順序是新到舊</span>
+def hrow(idx):                 <span class="muted"># idx=0 是最早那一天</span>
+    return 2 + (len(hist) - 1 - idx)</div>
+      <p>
+        寫入端同理:新的一天不是附加到最後一列,而是<strong>插進第 2 列、其餘整批重新編號</strong>。
+        這招只在「該分頁全是靜態值」時安全——<strong>含公式的列重新編號會讓相對參照跟著位移</strong>,
+        動手前先確認整張表沒有 <span class="num">&lt;f&gt;</span>。
+      </p>
+
+      <p class="formula-label">技術規則 8：借用別的模組的全域變數，記得還回去</p>
+      <p>
+        兩個帳戶共用同一套建表函式時，常見的偷懶做法是把共用模組的「目前分頁名稱」全域變數
+        改掉再呼叫。單獨跑沒問題，但只要<strong>同一個行程內接著跑另一個帳戶</strong>，
+        它就會讀到上一個帳戶的分頁。用 <span class="num">try/finally</span> 還原，
+        成本只有三行，卻能擋掉一種「單獨測都對、合起來就錯」的 bug。
+      </p>
+      <div class="formula">
+_saved = (mod.DAILY_TAB, mod.HIST_TAB)
+try:
+    mod.DAILY_TAB, mod.HIST_TAB = my_daily, my_hist
+    build(...)
+finally:
+    mod.DAILY_TAB, mod.HIST_TAB = _saved</div>
     </section>
   </main>
 </div>
@@ -1096,7 +1132,7 @@ for cal in older_months:                         <span class="muted"># 其餘月
 <footer class="page-foot">
   這套結構最早用在「每日漲跌」＋「報酬日曆」，之後複製一份改公式來源，
   同樣的做法就能套用在任何一個帳戶或資產類別上。<br>
-  <span style="opacity:0.75;">最後更新 2026-10-01｜現行版面：本月月曆置頂、日期由新到舊、加總列釘在表頭正下方。</span>
+  <span style="opacity:0.75;">最後更新 2026-10-01｜現行版面：本月月曆置頂、<b>歷史表與每日表都由新到舊</b>、加總列釘在表頭正下方。</span>
 </footer>
 
 </body>
