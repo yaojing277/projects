@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>報酬日曆建置手冊</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600;8..60,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+  :root {
+    --bg: #f5f7f9;
+    --surface: #ffffff;
+    --surface-alt: #edf1f4;
+    --border: #d9e0e6;
+    --text: #1b2430;
+    --text-muted: #5b6472;
+    --accent: #1e5f56;
+    --accent-strong: #143f39;
+    --accent-soft: #dbeae6;
+    --pos: #b23b3b;
+    --neg: #1f7a5c;
+    --code-bg: #10171c;
+    --code-text: #dbe6e2;
+    --code-muted: #7c9089;
+    --code-key: #6fc7b3;
+    --shadow: 0 1px 2px rgba(20, 30, 40, 0.06), 0 8px 24px -12px rgba(20, 30, 40, 0.12);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0f1417;
+      --surface: #161c21;
+      --surface-alt: #1c242a;
+      --border: #2b343c;
+      --text: #e6eaee;
+      --text-muted: #9aa5b1;
+      --accent: #59c2ac;
+      --accent-strong: #86dcc7;
+      --accent-soft: #17322c;
+      --pos: #e0736f;
+      --neg: #52b98a;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 12px 32px -14px rgba(0, 0, 0, 0.5);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --bg: #0f1417;
+    --surface: #161c21;
+    --surface-alt: #1c242a;
+    --border: #2b343c;
+    --text: #e6eaee;
+    --text-muted: #9aa5b1;
+    --accent: #59c2ac;
+    --accent-strong: #86dcc7;
+    --accent-soft: #17322c;
+    --pos: #e0736f;
+    --neg: #52b98a;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 12px 32px -14px rgba(0, 0, 0, 0.5);
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "IBM Plex Sans", "PingFang TC", "Noto Sans TC", system-ui, sans-serif;
+    line-height: 1.7;
+    font-size: 16px;
+  }
+
+  a { color: var(--accent-strong); }
+  a:focus-visible, button:focus-visible, summary:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  h1, h2, h3 {
+    font-family: "Source Serif 4", "Noto Serif TC", serif;
+    text-wrap: balance;
+    color: var(--text);
+    margin: 0;
+  }
+
+  .num {
+    font-family: "IBM Plex Mono", monospace;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ---------- Header ---------- */
+  header.hero {
+    padding: 3.5rem 1.5rem 3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .eyebrow {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent-strong);
+    background: var(--accent-soft);
+    padding: 0.3rem 0.75rem;
+    border-radius: 999px;
+    display: inline-block;
+  }
+
+  .eyebrow.dev {
+    color: var(--code-key);
+    background: var(--code-bg);
+  }
+
+  .appendix-note {
+    max-width: 68ch;
+    background: var(--surface-alt);
+    border: 1px dashed var(--border);
+    border-radius: 10px;
+    padding: 1rem 1.2rem;
+    font-size: 0.92rem;
+    color: var(--text-muted);
+  }
+  .appendix-note strong { color: var(--text); }
+
+  header.hero h1 {
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    max-width: 20ch;
+  }
+
+  header.hero p.lead {
+    max-width: 56ch;
+    color: var(--text-muted);
+    font-size: 1.05rem;
+    margin: 0;
+  }
+
+  /* mini calendar mockup */
+  .mini-cal {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(44px, 1fr));
+    gap: 4px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: var(--shadow);
+  }
+  .mini-cal .hd {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    text-align: center;
+    padding-bottom: 2px;
+  }
+  .mini-cal .cell {
+    aspect-ratio: 1.3;
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.68rem;
+    line-height: 1.15;
+    background: var(--surface-alt);
+    color: var(--text-muted);
+  }
+  .mini-cal .cell.pos { background: color-mix(in srgb, var(--pos) 16%, var(--surface)); color: var(--pos); }
+  .mini-cal .cell.neg { background: color-mix(in srgb, var(--neg) 16%, var(--surface)); color: var(--neg); }
+  .mini-cal .cell b { font-weight: 600; color: inherit; }
+  .mini-cal .cell.empty { background: transparent; }
+
+  /* ---------- Layout ---------- */
+  .shell {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem 6rem;
+    display: grid;
+    grid-template-columns: 220px minmax(0, 1fr);
+    gap: 3rem;
+    align-items: start;
+  }
+
+  nav.rail {
+    position: sticky;
+    top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+  nav.rail a {
+    display: flex;
+    gap: 0.6rem;
+    align-items: baseline;
+    text-decoration: none;
+    color: var(--text-muted);
+    font-size: 0.88rem;
+    padding: 0.45rem 0.6rem;
+    border-radius: 8px;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+  nav.rail a:hover { background: var(--surface-alt); color: var(--text); }
+  nav.rail a .n {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.75rem;
+    color: var(--accent-strong);
+    min-width: 1.4rem;
+  }
+  nav.rail .rail-title {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    padding: 0 0.6rem 0.5rem;
+  }
+
+  main { display: flex; flex-direction: column; gap: 4rem; min-width: 0; }
+
+  section { scroll-margin-top: 1.5rem; }
+
+  .step-head {
+    display: flex;
+    align-items: baseline;
+    gap: 0.9rem;
+    margin-bottom: 1rem;
+  }
+  .step-head .step-n {
+    font-family: "Source Serif 4", serif;
+    font-size: 2.1rem;
+    font-weight: 600;
+    color: var(--accent-soft);
+    -webkit-text-stroke: 1.5px var(--accent);
+    color: transparent;
+    line-height: 1;
+  }
+  .step-head h2 { font-size: 1.5rem; }
+
+  p { color: var(--text); }
+  section > p, section > ul, section > ol { max-width: 68ch; }
+  .text-muted { color: var(--text-muted); }
+
+  /* ---------- Architecture diagram ---------- */
+  .arch {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr auto 1fr;
+    align-items: center;
+    gap: 0.75rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+  }
+  .arch .box {
+    padding: 1rem;
+    border-radius: 10px;
+    background: var(--surface-alt);
+    border: 1px solid var(--border);
+    text-align: center;
+  }
+  .arch .box .t { font-family: "IBM Plex Mono", monospace; font-size: 0.78rem; color: var(--accent-strong); margin-bottom: 0.3rem; }
+  .arch .box .d { font-size: 0.86rem; color: var(--text-muted); }
+  .arch .arrow { color: var(--text-muted); font-size: 1.4rem; text-align: center; }
+  @media (max-width: 760px) {
+    .arch { grid-template-columns: 1fr; }
+    .arch .arrow { transform: rotate(90deg); }
+  }
+
+  /* ---------- Tables ---------- */
+  .table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 10px; box-shadow: var(--shadow); }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    min-width: 480px;
+    background: var(--surface);
+    font-size: 0.92rem;
+  }
+  caption {
+    text-align: left;
+    padding: 0.7rem 1rem 0;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  th, td { padding: 0.6rem 0.9rem; border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; }
+  thead th {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.78rem;
+    color: var(--accent-strong);
+    background: var(--surface-alt);
+    white-space: nowrap;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  td.cellref, th.cellref { font-family: "IBM Plex Mono", monospace; white-space: nowrap; }
+
+  /* ---------- Formula / code blocks ---------- */
+  .formula {
+    background: var(--code-bg);
+    color: var(--code-text);
+    border-radius: 10px;
+    padding: 0.9rem 1.1rem;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.85rem;
+    overflow-x: auto;
+    box-shadow: var(--shadow);
+    line-height: 1.6;
+  }
+  .formula .cellname { color: var(--code-key); }
+  .formula .muted { color: var(--code-muted); }
+  .formula-label {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin: 1.1rem 0 0.4rem;
+  }
+
+  /* ---------- Callouts ---------- */
+  .callout {
+    border-radius: 10px;
+    padding: 1rem 1.2rem;
+    border: 1px solid var(--border);
+    background: var(--surface-alt);
+    display: flex;
+    gap: 0.8rem;
+    max-width: 68ch;
+  }
+  .callout .icon { font-size: 1.1rem; line-height: 1.5; }
+  .callout.warn { border-color: color-mix(in srgb, var(--pos) 35%, var(--border)); background: color-mix(in srgb, var(--pos) 8%, var(--surface)); }
+  .callout p { margin: 0; font-size: 0.92rem; }
+  .callout strong { color: var(--text); }
+
+  /* ---------- Checklist ---------- */
+  .checklist { display: flex; flex-direction: column; gap: 0.6rem; max-width: 68ch; }
+  .checklist li {
+    list-style: none;
+    display: flex;
+    gap: 0.7rem;
+    align-items: flex-start;
+    padding: 0.7rem 0.9rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+  .checklist ul { margin: 0; padding: 0; }
+  .checklist .box {
+    width: 1.05rem; height: 1.05rem; margin-top: 0.15rem; flex: none;
+    border: 1.5px solid var(--accent); border-radius: 4px;
+  }
+
+  footer.page-foot {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 3rem;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    border-top: 1px solid var(--border);
+  }
+
+  @media (max-width: 860px) {
+    .shell { grid-template-columns: 1fr; }
+    nav.rail { position: static; flex-direction: row; flex-wrap: wrap; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <span class="eyebrow">SPREADSHEET PLAYBOOK</span>
+  <h1>每日漲跌報酬日曆<br>建置手冊</h1>
+  <p class="lead">
+    把一份「每天市值/成本/損益」的流水帳，變成一張自動跟著資料成長的每日漲跌表、
+    雙軸走勢圖，跟一份紅漲綠跌的月曆熱力圖。以下是完整重現這套結構的步驟，
+    照抄公式即可套用在任何持股帳戶。
+  </p>
+  <div class="mini-cal" aria-hidden="true">
+    <span class="hd">一</span><span class="hd">二</span><span class="hd">三</span><span class="hd">四</span><span class="hd">五</span>
+    <div class="cell empty"></div>
+    <div class="cell pos"><b>1</b>+29,490</div><div class="cell neg"><b>2</b>−27,135</div>
+    <div class="cell neg"><b>3</b>−10,955</div><div class="cell pos"><b>4</b>+26,600</div>
+    <div class="cell pos"><b>7</b>+24,205</div><div class="cell neg"><b>8</b>−7,965</div>
+    <div class="cell pos"><b>9</b>+1,105</div><div class="cell neg"><b>10</b>−8,045</div>
+    <div class="cell neg"><b>11</b>−24,527</div>
+    <div class="cell neg"><b>14</b>−11,655</div><div class="cell neg"><b>15</b>−6,830</div>
+    <div class="cell pos"><b>16</b>+10,125</div><div class="cell pos"><b>17</b>+17,550</div>
+    <div class="cell pos"><b>18</b>+27,010</div>
+  </div>
+</header>
+
+<div class="shell">
+  <nav class="rail" aria-label="章節">
+    <div class="rail-title">目錄</div>
+    <a href="#arch"><span class="n">00</span>整體架構與版面</a>
+    <a href="#step1"><span class="n">01</span>歷史資料表</a>
+    <a href="#step2"><span class="n">02</span>每日漲跌表</a>
+    <a href="#step3"><span class="n">03</span>雙軸走勢圖</a>
+    <a href="#step4"><span class="n">04</span>報酬日曆</a>
+    <a href="#step5"><span class="n">05</span>逐日長條圖</a>
+    <a href="#step6"><span class="n">06</span>回填與自動化</a>
+    <a href="#pitfalls"><span class="n">07</span>常見陷阱</a>
+    <a href="#appendix"><span class="n">08</span>技術附錄</a>
+  </nav>
+
+  <main>
+    <section id="arch">
+      <div class="step-head"><span class="step-n">00</span><h2>整體架構與版面</h2></div>
+      <p>
+        這套表格看起來只有一張分頁，其實底層分三層資料，層層疊上去。
+        搞懂這個順序，後面的公式就只是照抄。
+      </p>
+      <div class="arch">
+        <div class="box">
+          <div class="t">① 歷史資料表</div>
+          <div class="d">一天一列，記市值/成本/損益的「事實」</div>
+        </div>
+        <div class="arrow">→</div>
+        <div class="box">
+          <div class="t">② 每日漲跌表</div>
+          <div class="d">用公式算出「跟昨天比」的漲跌，餵給圖表</div>
+        </div>
+        <div class="arrow">→</div>
+        <div class="box">
+          <div class="t">③ 走勢圖／報酬日曆</div>
+          <div class="d">折線圖看趨勢，月曆熱力圖看單日紅綠、長條圖看波動</div>
+        </div>
+      </div>
+      <p class="text-muted" style="margin-top:1rem;">
+        原則只有一個：<strong>歷史資料表是唯一事實來源</strong>。其他每一層都是公式算出來的，
+        之後要更新，永遠只手動改①，②③自己會跟著動。
+      </p>
+
+      <p class="formula-label">版面順序：把最常看的東西放最上面</p>
+      <p>
+        ②③ 會全部擺在同一張分頁上。排列順序不是隨便放的——這份表最常用的情境是
+        <strong>用手機打開、看一眼這個月怎麼樣</strong>，所以由上到下是這個順序：
+      </p>
+      <div class="table-wrap">
+        <table>
+          <caption>單一分頁的版面配置（列號為範例）</caption>
+          <thead><tr><th class="cellref">列</th><th>區塊</th><th>為什麼放這裡</th></tr></thead>
+          <tbody>
+            <tr><td class="num">1 ~ 20</td><td><strong>本月報酬日曆</strong>＋本月逐日長條圖</td><td>打開就看到，不用捲動</td></tr>
+            <tr><td class="num">21</td><td>（空一列）</td><td>區塊之間留白</td></tr>
+            <tr><td class="num">22</td><td>每日漲跌表 <strong>標題列</strong>（合併置中）</td><td>—</td></tr>
+            <tr><td class="num">23</td><td><strong>表頭</strong>（日期／總市值／…）</td><td>—</td></tr>
+            <tr><td class="num">24</td><td><strong>加總列</strong>（累計統計）</td><td>釘在表頭正下方，像一般表格的「合計」</td></tr>
+            <tr><td class="num">25 ~ 182</td><td><strong>逐日資料</strong>，<strong>日期由新到舊</strong></td><td>最新一天永遠在第 25 列，不用捲到底</td></tr>
+            <tr><td class="num">183</td><td>最早那一天（沒有前一天可比）</td><td>公式會自動讓 D~G 留空，不用特別處理</td></tr>
+            <tr><td class="num">（表格下方）</td><td>上個月、上上個月…的報酬日曆</td><td>越舊越往下，要回頭看才捲</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout">
+        <span class="icon">💡</span>
+        <p>三個「放最上面」的設計都是同一個理由：<strong>最新的資訊不該需要捲動</strong>——
+        本月月曆在最頂端、最新一天在表格第一列、累計數字釘在表頭下方。
+        舊資料往下沉，需要時再去找。</p>
+      </div>
+      <div class="callout warn">
+        <span class="icon">⚠</span>
+        <p>這個版面有個副作用要先知道：每日漲跌表<strong>上下都被月曆區塊夾住</strong>。
+        所以後面所有「範圍」的寫法（加總、查表、圖表資料來源）都<strong>不能用開放式的整欄</strong>，
+        一定要明確寫到表格的最後一列為止，否則會把月曆裡的數字一起算進去。這點跟「表格擺在
+        最上面、下面一路空白」的傳統版面很不一樣，是最容易踩的雷。</p>
+      </div>
+    </section>
+
+    <section id="step1">
+      <div class="step-head"><span class="step-n">01</span><h2>建立歷史資料表</h2></div>
+      <p>新開一張分頁（下面公式裡先叫它「<span class="num">資產歷史</span>」，你可以換成自己的名字），欄位如下：</p>
+      <div class="table-wrap">
+        <table>
+          <caption>資產歷史（這張永遠由舊到新，一天一列往下加）</caption>
+          <thead><tr><th class="cellref">A</th><th class="cellref">B</th><th class="cellref">C</th><th class="cellref">D</th><th class="cellref">E</th></tr></thead>
+          <tbody>
+            <tr><td>日期</td><td>總市值</td><td>持有成本</td><td>未實現損益</td><td>報酬率</td></tr>
+            <tr><td class="num">2026/01/30</td><td class="num">36,300</td><td class="num">36,289</td><td class="num">=B2-C2</td><td class="num">=D2/C2</td></tr>
+            <tr><td class="num">2026/02/02</td><td class="num">35,750</td><td class="num">36,289</td><td class="num">=B3-C3</td><td class="num">=D3/C3</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        每天收盤後，往下加一列：今天的<strong>總市值</strong>跟<strong>持有成本</strong>。
+        持有成本只有在真的買賣時才會變，平常照抄前一天即可。
+      </p>
+      <div class="callout">
+        <span class="icon">💡</span>
+        <p><strong>這張表維持「由舊到新」不要動</strong>。等一下每日漲跌表雖然要顯示成「由新到舊」，
+        但那是用公式倒著讀出來的，原始資料照時間順序往下長最單純，也最不容易出錯。</p>
+      </div>
+      <div class="callout">
+        <span class="icon">💡</span>
+        <p>同一天如果重算過要重貼，<strong>直接覆蓋當天那一列</strong>，不要往下加新的一列，
+        不然後面的每日漲跌表會把同一天算成漲跌兩次。</p>
+      </div>
+    </section>
+
+    <section id="step2">
+      <div class="step-head"><span class="step-n">02</span><h2>建立每日漲跌表</h2></div>
+      <p>
+        在同一張分頁上，接在本月月曆下面（本文範例是<strong>第 22 列</strong>開始，
+        你的月曆多高就往後挪幾列）。表格結構：
+      </p>
+      <div class="table-wrap">
+        <table>
+          <caption>每日漲跌表的四種列</caption>
+          <thead><tr><th class="cellref">列</th><th>角色</th><th>內容</th></tr></thead>
+          <tbody>
+            <tr><td class="num">22</td><td>標題列</td><td>一句話標題，<strong>A22:G22 合併置中</strong></td></tr>
+            <tr><td class="num">23</td><td>表頭</td><td>日期／總市值／未實現損益／單日損益漲跌／買進金額／單日市值漲跌／單日報酬率</td></tr>
+            <tr><td class="num">24</td><td><strong>加總列</strong></td><td>累計統計（不是某一天），釘死在這裡不動</td></tr>
+            <tr><td class="num">25 ~ 182</td><td>逐日列</td><td><strong>最新一天在第 25 列</strong>，往下越來越舊</td></tr>
+            <tr><td class="num">183</td><td>最後一列</td><td>最早那一天，D~G 會自動留空（見下方公式）</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        每天多一天資料，<strong>新的一天插進第 25 列</strong>、原本的整批往下推一列，
+        加總列（24）永遠不動。這跟一般「往下加一列」的直覺相反，但換來的是：
+        打開表格第一眼就是最新的一天，跟上面的本月月曆看到的是同一件事。
+      </p>
+
+      <p class="formula-label">逐日列：用輔助欄把「由舊到新」倒著讀出來</p>
+      <p>
+        歷史表是由舊到新，這張表要由新到舊，中間需要一個換算。最好懂的做法是開一個
+        <strong>輔助欄（H 欄，可以隱藏）</strong>，先算出「這一列該讀歷史表的第幾筆」，
+        其他欄位再一律引用它。這樣整列往下拉就好，不用一列一列改公式。
+      </p>
+      <div class="formula">
+<span class="muted">輔助欄（H25 往下拉；1 = 最早那一天）</span>
+H25 =COUNTA(<span class="cellname">資產歷史</span>!$A$2:$A$10000)-(ROW()-25)
+
+<span class="muted">以下 A25:G25 整列往下拉到表格最後一列即可</span>
+A25 <span class="muted">日期</span>         =IF($H25&lt;1,"",INDEX(<span class="cellname">資產歷史</span>!$A$2:$A$10000,$H25))
+B25 <span class="muted">總市值</span>       =IF($H25&lt;1,"",INDEX(<span class="cellname">資產歷史</span>!$B$2:$B$10000,$H25))
+C25 <span class="muted">未實現損益</span>   =IF($H25&lt;1,"",INDEX(<span class="cellname">資產歷史</span>!$D$2:$D$10000,$H25))
+D25 <span class="muted">單日損益漲跌</span> =IF($H25&lt;2,"",INDEX(<span class="cellname">資產歷史</span>!$D$2:$D$10000,$H25)
+                                -INDEX(<span class="cellname">資產歷史</span>!$D$2:$D$10000,$H25-1))
+E25 <span class="muted">買進金額</span>     =IF($H25&lt;2,"",INDEX(<span class="cellname">資產歷史</span>!$C$2:$C$10000,$H25)
+                                -INDEX(<span class="cellname">資產歷史</span>!$C$2:$C$10000,$H25-1))
+F25 <span class="muted">單日市值漲跌</span> =IF($H25&lt;2,"",INDEX(<span class="cellname">資產歷史</span>!$B$2:$B$10000,$H25)
+                                -INDEX(<span class="cellname">資產歷史</span>!$B$2:$B$10000,$H25-1))
+G25 <span class="muted">單日報酬率</span>   =IF(OR($H25&lt;2,INDEX(<span class="cellname">資產歷史</span>!$B$2:$B$10000,$H25-1)=0),"",
+      (INDEX(<span class="cellname">資產歷史</span>!$D$2:$D$10000,$H25)-INDEX(<span class="cellname">資產歷史</span>!$D$2:$D$10000,$H25-1))
+      /INDEX(<span class="cellname">資產歷史</span>!$B$2:$B$10000,$H25-1))</div>
+      <div class="callout">
+        <span class="icon">💡</span>
+        <p><strong>最後一列會自己處理好</strong>：拉到最底下那一列時 <span class="num">$H=1</span>
+        （最早的那一天），沒有「前一天」可以比，D~G 的 <span class="num">IF($H&lt;2,"")</span>
+        會自動讓它們留空，只留下日期／總市值／損益三個原始數字。這一列就是整張表的「起點」，
+        不用特別處理。</p>
+      </div>
+      <div class="callout warn">
+        <span class="icon">⚠</span>
+        <p><strong>A 欄日期記得手動套用日期格式</strong>——如果「資產歷史」的日期欄本身存的是
+        <em>真正的日期數值</em>（不是文字，例如 Google Sheets 打日期常會自動判斷成日期型別），
+        這裡用公式帶過來的儲存格<strong>不會自動繼承日期格式</strong>，會顯示成一串序號數字
+        （例如 <span class="num">46260</span>）。把 A25 往下整欄選起來，手動套用一次
+        「日期」格式（例如 <span class="num">yyyy/M/d</span>）即可。</p>
+      </div>
+
+      <p class="formula-label">加總列（第 24 列）：累計統計，釘在表頭正下方</p>
+      <p>
+        這一列不是某一天，是<strong>整段期間的累計</strong>。範例的逐日列是第 25 ~ 182 列：
+      </p>
+      <div class="formula">
+A24 <span class="muted">說明文字</span>       累計26/01至今          <span class="muted">← 純文字，字級調小一點（例如 9）</span>
+B24 <span class="muted">歷史最高總市值</span> =MAX(B25:B182)
+C24 <span class="muted">歷史最高損益</span>   =MAX(C25:C182)
+D24 <span class="muted">累計損益漲跌</span>   =SUM(D25:D182)
+E24 <span class="muted">累計投入金額</span>   =SUM(E25:E182)
+F24 <span class="muted">累計市值漲跌</span>   =SUM(F25:F182)
+G24 <span class="muted">累計報酬率</span>     =D24/B24              <span class="muted">← 累計損益 ÷ 歷史最高市值</span></div>
+      <div class="callout warn">
+        <span class="icon">⚠</span>
+        <p><strong>範圍的下界一定要寫到「表格最後一列」為止</strong>，
+        <span class="num">不要</span>寫成 <span class="num">SUM(D25:D1048576)</span> 這種到底的寫法。
+        因為表格下面接的就是上個月、上上個月的月曆區塊，而月曆的金額也落在 A~F 欄——
+        開放式範圍會把整年的月曆數字全部加進來，得到一個看起來很像、實際上錯得離譜的總計。
+        每次資料多一列，記得把 <span class="num">182</span> 這個上界一起往下延伸一列。</p>
+      </div>
+      <div class="callout">
+        <span class="icon">💡</span>
+        <p><strong>B24/C24 用 MAX 而不是「今天的值」</strong>，看的是「這段期間最高曾經到哪裡」，
+        搭配旁邊最新一天的數字，一眼就知道現在離高點多遠。如果你想要的是別的定義
+        （例如期末值），把 MAX 換成 <span class="num">=B25</span> 即可，其他都不用動。</p>
+      </div>
+
+      <p class="formula-label">顏色規則一：單日報酬率（G 欄）正紅負綠，越極端底色越深</p>
+      <p>
+        對 <span class="num">G24:G182</span>（<strong>含加總列</strong>）套 5 條條件式格式規則，由上到下依序判斷：
+      </p>
+      <div class="table-wrap">
+        <table>
+          <caption>條件式格式規則（依序判斷，由上而下）</caption>
+          <thead><tr><th>順序</th><th>條件</th><th>效果</th><th>命中後繼續判斷下一條？</th></tr></thead>
+          <tbody>
+            <tr><td class="num">1</td><td>大於 0</td><td><span style="color:#DC2626;font-weight:600;">紅色文字</span></td><td>繼續</td></tr>
+            <tr><td class="num">2</td><td>小於 0</td><td><span style="color:#047857;font-weight:600;">綠色文字</span></td><td>繼續</td></tr>
+            <tr><td class="num">3</td><td>絕對值 &gt; 5%</td><td><span style="background:#FFFF00;color:#1b2430;padding:0.1rem 0.5rem;border-radius:4px;">填滿純黃色</span></td><td><strong>停止</strong></td></tr>
+            <tr><td class="num">4</td><td>絕對值 &gt; 4%</td><td><span style="background:#FFE699;color:#1b2430;padding:0.1rem 0.5rem;border-radius:4px;">填滿偏淺黃色</span></td><td><strong>停止</strong></td></tr>
+            <tr><td class="num">5</td><td>絕對值 &gt; 3%</td><td><span style="background:#FFF2CC;color:#1b2430;padding:0.1rem 0.5rem;border-radius:4px;">填滿最淺黃色</span></td><td>（最後一條）</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        文字顏色（規則 1、2）跟背景填色（規則 3～5）是兩種不同屬性，可以同時套用在同一格上，
+        不會互相取代——例如單日報酬率 <span class="num">+6%</span> 的格子，會同時是
+        <strong>紅色文字</strong>加<strong>純黃色底</strong>。
+      </p>
+      <div class="callout warn">
+        <span class="icon">⚠</span>
+        <p><strong>規則 3、4 一定要打勾「符合時停止評估後續規則」</strong>
+        （Excel 的條件式格式規則管理員裡叫「<span class="num">Stop If True</span>」，
+        Google Sheets 則是靠規則本身的判斷範圍互斥來達成同樣效果）。不然一格
+        <span class="num">6%</span> 的儲存格會同時符合「大於 5%」「大於 4%」「大於 3%」
+        三條規則，三層黃色疊在一起，顏色會跑掉、不會停在你要的那一階。規則 1、2（文字顏色）
+        則<strong>不要</strong>打勾，這樣不管黃色填到第幾階，紅／綠字都還是會照常顯示。</p>
+      </div>
+
+      <p class="formula-label">顏色規則二：加總列的累計損益（D24）也要正紅負綠</p>
+      <p>
+        加總列的 <span class="num">D24</span>（累計損益漲跌）單獨再套一組「大於 0 紅字／小於 0 綠字」，
+        只有這一格、不含黃色底。這是整張表最常被看的數字，有顏色比較快判斷；黃色底那幾階是
+        給「單日波動」用的，累計值套上去只會整片黃，沒有意義。
+      </p>
+
+      <p class="formula-label">看得到嗎？暗色主題的字色陷阱</p>
+      <div class="callout warn">
+        <span class="icon">⚠</span>
+        <p>
+        手機版的試算表 App 通常會跟著系統切換<strong>暗色主題</strong>。這時候
+        「沒有填色」＋「跟著主題走的字色」的儲存格，會變成<strong>暗底配暗字，整片看不到</strong>。
+        解法是把表格裡的儲存格<strong>明確指定成白底黑字</strong>（不要留「無填色」、不要用
+        「自動／主題色」的字色），這樣不管檢視的人用亮色還是暗色主題，顯示出來都一樣。
+        設定完記得<strong>真的用手機開一次暗色主題看看</strong>——這個問題在電腦上完全看不出來。
+        </p>
+      </div>
+
+      <p class="formula-label">字級微調</p>
+      <p>
+        兩個地方值得手動調小：加總列的說明文字（<span class="num">A24</span>，字比較長，調到 9）
+        跟表頭裡最長的那個欄名（<span class="num">D23</span>「單日損益漲跌」，調到 8）。
+        不調的話這兩格會把欄寬撐開，整張表看起來鬆鬆散散的。
+      </p>
+    </section>
+
+    <section id="step3">
+      <div class="step-head"><span class="step-n">03</span><h2>加上雙軸走勢圖</h2></div>
+      <p>
+        選「每日漲跌表」的資料畫折線圖，資料範圍是<strong>逐日列</strong>
+        （範例的 <span class="num">A25:A182</span> 跟對應的 B/C/D 欄），
+        <strong>不要包含第 24 列的加總列</strong>——那是整段累計，混進去會讓折線爆衝。
+      </p>
+      <ul>
+        <li><strong>主軸（左）</strong>：總市值（B 欄）＋未實現損益（C 欄）— 量級接近，共用一軸</li>
+        <li><strong>副軸（右）</strong>：單日損益漲跌（D 欄）— 量級小很多，獨立一軸才看得出波動</li>
+        <li><strong>類別軸</strong>：日期（A 欄）</li>
+      </ul>
+      <div class="callout warn">
+        <span class="icon">⚠</span>
+        <p>
+        <strong>記得把類別軸的順序反轉</strong>。表格是由新到舊排的，圖表直接照抄就會變成
+        「左邊最新、右邊最舊」，跟所有人看走勢圖的習慣相反。在座標軸設定裡把類別軸
+        （橫軸）勾選「<span class="num">反轉順序</span>」（Excel 叫「類別次序反轉」，
+        OOXML 底層是 <span class="num">orientation = maxMin</span>），圖就會回到
+        <strong>左舊右新</strong>。
+        </p>
+        <p style="margin-top:0.6rem;">
+        重點是：<strong>反轉的是圖表的讀法，不是資料</strong>。不要為了畫圖另外複製一份
+        「由舊到新」的資料，那等於同一份數字維護兩次，遲早會不同步。
+        </p>
+      </div>
+      <p class="text-muted">大部分試算表軟體選「插入圖表」後，把 D 欄那個數列的座標軸切到「副座標軸／次要軸」就好，不用手刻。</p>
+      <div class="callout">
+        <span class="icon">💡</span>
+        <p>折線圖的擺放位置：把它的左上角對齊<strong>每日漲跌表的標題列</strong>、放在表格右邊
+        的空白欄（例如 I 欄）。這樣圖跟它的資料永遠在同一個水平高度，表格因為月曆增加而整體
+        往下移時，圖也跟著移，不會走散。</p>
+      </div>
+    </section>
+
+    <section id="step4">
+      <div class="step-head"><span class="step-n">04</span><h2>建立報酬日曆（月曆熱力圖）</h2></div>
+      <p>
+        月曆區塊的結構每個月都一樣，差別只在放的位置：
+        <strong>本月放在整張分頁的最上面（第 1 列起）</strong>，
+        <strong>上個月以前的，全部接在每日漲跌表下面</strong>，由新到舊往下排。
+      </p>
+      <div class="callout">
+        <span class="icon">💡</span>
+        <p>為什麼不是全部排在一起？因為「本月」是每天都會看的，「上個月以前」是偶爾回顧的。
+        把本月抽出來釘在最頂端，手機打開就是這個月的紅綠格子，其他月份要看再往下捲。</p>
+      </div>
+      <p>
+        每個月曆<strong>固定 6 週骨架</strong>（不管當月實際幾週，永遠留 6 週的格子），
+        這樣每個月的區塊高度一致，長條圖的錨點也不用每月調整。
+      </p>
+      <div class="table-wrap">
+        <table>
+          <caption>月曆區塊 — 一週 3 列</caption>
+          <thead><tr><th class="cellref">A</th><th class="cellref">B</th><th class="cellref">C</th><th class="cellref">D</th><th class="cellref">E</th><th class="cellref">F</th></tr></thead>
+          <tbody>
+            <tr><td>一</td><td>二</td><td>三</td><td>四</td><td>五</td><td>週損益</td></tr>
+            <tr><td class="num">7</td><td class="num">8</td><td class="num">9</td><td class="num">10</td><td class="num">11</td><td></td></tr>
+            <tr><td class="num">+24,205</td><td class="num">−7,965</td><td class="num">+1,105</td><td class="num">−8,045</td><td class="num">−24,527</td><td class="num">=SUM(A●:E●)</td></tr>
+            <tr><td class="num">2.9%</td><td class="num">−0.9%</td><td class="num">0.1%</td><td class="num">−0.9%</td><td class="num">−2.9%</td><td class="num">=F●/期初市值</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>每一格金額，用 <span class="num">VLOOKUP</span> 或 <span class="num">INDEX/MATCH</span> 拿「每日漲跌表」裡對應那天的 D 欄（單日損益漲跌）：</p>
+      <div class="formula">
+=IFERROR(INDEX(<span class="cellname">每日漲跌</span>!$D$25:$D$182,
+         MATCH(日期儲存格, <span class="cellname">每日漲跌</span>!$A$25:$A$182, 0)), "")</div>
+      <div class="callout warn">
+        <span class="icon">⚠</span>
+        <p><strong>查表範圍同樣只能框「逐日列」</strong>（範例的 25~182 列）。往上多框到加總列
+        （24）或往下多框到別的月曆，都會查到不該查的東西。日期是由新到舊排的沒關係——
+        <span class="num">MATCH(..., 0)</span> 是精確比對，不要求排序。</p>
+      </div>
+
+      <p class="formula-label">紅漲綠跌的條件式格式</p>
+      <p>對整個月曆區塊（金額列＋百分比列）套用兩條規則：</p>
+      <div class="formula">
+規則一：儲存格值 &gt; 0  →  紅字 ＋ 淺紅底（漲）
+規則二：儲存格值 &lt; 0  →  綠字 ＋ 淺綠底（跌）</div>
+      <div class="callout">
+        <span class="icon">🇹🇼</span>
+        <p>這裡刻意用<strong>台灣盤面習慣</strong>（漲紅跌綠），跟美股常見的漲綠跌紅相反，
+        套用條件式格式前先確認你要哪一種。</p>
+      </div>
+      <p>標題列再放「本月損益」「本月報酬率」兩個彙總儲存格（加總整個月的金額列即可）。</p>
+      <div class="callout">
+        <span class="icon">💡</span>
+        <p><strong>小技巧</strong>：每個月曆區塊的標題那一格，套上一個醒目色（例如黃底黑字加粗），
+        月份一多、要在長長的表格裡找「8月報酬日曆」在哪裡時會快很多。</p>
+      </div>
+      <div class="callout">
+        <span class="icon">💡</span>
+        <p><strong>要往回做幾個月？</strong>從最新的月份一路往回做到有資料的最早月份即可。
+        唯一的例外是：如果最早那個月<strong>不是從 1 號開始</strong>（帳戶剛開、只有月中幾天），
+        那份月曆會有一大半是空的，跳過不做比較好看。如果最早那天剛好就是 1 號，那就是完整的
+        一個月，照做。</p>
+      </div>
+      <div class="callout">
+        <span class="icon">💡</span>
+        <p><strong>月曆裡的百分比建議設成小數點後 1 位</strong>，跟每日漲跌表 G 欄的百分比
+        （可以留 2 位）分開設定。月曆是拿來快速掃視的，數字太細反而看不出重點。</p>
+      </div>
+    </section>
+
+    <section id="step5">
+      <div class="step-head"><span class="step-n">05</span><h2>加上逐日長條圖</h2></div>
+      <p>用月曆區塊裡的「金額列」（每週 3 列裡的第 2 列）畫長條圖，正值紅色、負值綠色。</p>
+      <div class="callout warn">
+        <span class="icon">⚠</span>
+        <p><strong>這一步最容易踩雷</strong>：資料來源一定要用「多重範圍的儲存格參照」
+        （把 6 週的金額列框起來，中間用逗號連接），<strong>不要</strong>把每天的數字複製貼上成
+        寫死的字面資料。</p>
+      </div>
+      <div class="formula">
+<span class="muted">✓ 正確：真實儲存格參照，之後改資料圖表會自己動</span>
+=(<span class="cellname">每日漲跌</span>!$A$4:$E$4, <span class="cellname">每日漲跌</span>!$A$7:$E$7, <span class="cellname">每日漲跌</span>!$A$10:$E$10, …)
+
+<span class="muted">✗ 錯誤：把數字貼死當圖表資料，改了原始表格圖表也不會變，
+   且部分軟體重新開檔時可能直接判定圖表資料不完整、整張圖被拿掉</span></div>
+      <p>沒有交易的日子（假日、還沒到的未來日）該格留空，圖表會自動出現缺口，不用刻意補 0。</p>
+      <div class="callout">
+        <span class="icon">💡</span>
+        <p><strong>擺放位置的統一規則</strong>：每張長條圖的左上角，固定對齊
+        <strong>它那個月月曆的標題列</strong>、放在月曆右邊固定的同一欄（例如 H 欄）。
+        每個月的圖就會像貼齊格線一樣整齊排下來。折線圖則放在再右邊一欄（例如 I 欄），
+        跟長條圖錯開，兩種圖才不會疊在一起。</p>
+      </div>
+    </section>
+
+    <section id="step6">
+      <div class="step-head"><span class="step-n">06</span><h2>回填歷史與每日自動化</h2></div>
+      <p><strong>回填舊資料</strong>：如果手上有每一批股票的「成交日期、股數、成本」，
+      搭配任何一個能查歷史股價的來源，就能反推出「這些持股從最早那筆成交日起、每個交易日」
+      的市值走勢——不用一天一天手動貼，直接把整段歷史一次補進「資產歷史」表。算法是：</p>
+      <div class="formula">
+某天的持有股數 = Σ（成交日 ≤ 這天 的所有批次股數）
+某天的持有成本 = Σ（成交日 ≤ 這天 的所有批次成本）
+某天的總市值   = Σ（該股票當天持有股數 × 當天收盤價）
+某天的未實現損益 = 總市值 − 持有成本</div>
+      <p><strong>之後每天自動更新</strong>：只要股數沒有異動（沒有加碼減碼），
+      「今日市值」就是「目前股數 × 今日收盤價」，可以寫一支排程腳本
+      （或用試算表軟體本身的排程巨集）每天收盤後自動抓官方收盤價、算出當天數字、
+      往「資產歷史」加一列——整套「每日漲跌表／走勢圖／報酬日曆」因為都是公式，會自動跟著往下長。
+      一旦有買賣，股數/成本基礎要跟著手動更新一次，之後才會繼續準確。</p>
+      <div class="callout warn">
+        <span class="icon">⚠</span>
+        <p><strong>買賣之後別忘了回頭修當天那一列</strong>：如果排程當天已經先用舊股數算過一次，
+        更新完股數/成本要<strong>重跑那一天</strong>覆蓋掉，不然那天的「買進金額」會是 0、
+        單日損益也會被算成暴漲或暴跌。判斷成交日用<strong>成交日</strong>，不是券商對帳單上的
+        交割日（T+2），兩者差兩個營業日。</p>
+      </div>
+    </section>
+
+    <section id="pitfalls">
+      <div class="step-head"><span class="step-n">07</span><h2>常見陷阱檢查表</h2></div>
+      <ul class="checklist">
+        <li><span class="box"></span>
+          <p><strong>所有範圍都要明確寫到表格最後一列</strong>——加總、月曆查表、圖表資料來源，
+          一律不能用開放式整欄。表格上下都被月曆夾住，開放式範圍會把月曆的數字一起吃進去。
+          這是新版面最容易犯、而且錯了不會報錯的一個坑。</p>
+        </li>
+        <li><span class="box"></span>
+          <p><strong>加總列（第 24 列）不是某一天</strong>——畫折線圖時資料範圍要從第 25 列開始，
+          把它排除在外。</p>
+        </li>
+        <li><span class="box"></span>
+          <p><strong>圖表的類別軸要反轉</strong>——表格由新到舊，圖表不反轉就會變成左新右舊，
+          跟看走勢圖的習慣相反。反轉的是圖表設定，不要另外複製一份正序資料。</p>
+        </li>
+        <li><span class="box"></span>
+          <p><strong>用手機開暗色主題實測一次</strong>——「無填色＋自動字色」的儲存格在暗色主題下
+          會變成暗底暗字整片看不到。表格範圍請明確指定白底黑字。這個問題在電腦上完全看不出來。</p>
+        </li>
+        <li><span class="box"></span>
+          <p><strong>數字欄的文字顏色，複製格式後要親眼確認</strong>——套用別的儲存格樣式時，
+          字色會一起被繼承過來，如果來源剛好是「白字配深色底」，貼到淺色底就變成看不見的白字。</p>
+        </li>
+        <li><span class="box"></span>
+          <p><strong>同一天不要重複加列</strong>——重算就覆蓋當天那一列，不然每日漲跌表會把同一天的變化算兩次。</p>
+        </li>
+        <li><span class="box"></span>
+          <p><strong>日期欄記得手動套用日期格式</strong>——見第 02 步，公式只會帶值過去，
+          不會帶著來源儲存格的格式一起走，來源是真日期時尤其容易忘記，沒套格式會顯示成一串序號數字。</p>
+        </li>
+        <li><span class="box"></span>
+          <p><strong>月曆固定留 6 週骨架</strong>——即使某個月只需要 5 週，也保留第 6 週的空白格，
+          這樣長條圖的資料範圍每個月都一樣，不用每月手動調整。</p>
+        </li>
+        <li><span class="box"></span>
+          <p><strong>長條圖資料來源用儲存格參照，不要用字面數字</strong>——見第 05 步，
+          這是唯一一個「看起來能動，但改了資料圖表不會跟著動」的陷阱。</p>
+        </li>
+        <li><span class="box"></span>
+          <p><strong>每多一個月，下半部的東西整體往下移</strong>——新月份的月曆一加，
+          底下所有月曆的列號全部位移。任何寫死列號的設定（圖表錨點、條件式格式範圍、
+          月曆查表範圍）都要跟著檢查一次。手動維護時這是每月一次的固定工作。</p>
+        </li>
+        <li><span class="box"></span>
+          <p><strong>報酬日曆的百分比，建議獨立設成小數點後 1 位</strong>——跟每日漲跌表本身
+          的百分比欄（可以留 2 位甚至更精確）分開處理，月曆本來就是快速掃視用的，
+          數字太細反而看不出重點。</p>
+        </li>
+      </ul>
+    </section>
+
+    <section id="appendix">
+      <div class="step-head"><span class="step-n">08</span><h2>技術附錄</h2></div>
+      <span class="eyebrow dev">FOR AUTOMATION BUILDERS</span>
+      <p style="margin-top:1rem;">
+        以下 6 條規則<strong>不是</strong>給手動在 Excel／Google Sheets 介面上操作的人看的——
+        用滑鼠設定一次格式，它就會永久固定，不會無緣無故跑掉。這幾條是我們用
+        <strong>Python 直接改 xlsx 底層檔案</strong>（解壓縮成 zip、改裡面的 XML、再重新壓縮，
+        俗稱「zip 手術」）來自動化整份報表時，才會遇到的問題。如果你也是寫程式產生／維護這類
+        報表（不論是 Claude、其他 LLM，還是自己手刻的腳本），這幾條會幫你少踩一些坑。
+      </p>
+      <div class="appendix-note">
+        <strong>為什麼手動編輯不會壞，程式編輯卻會？</strong>
+        Excel／Google Sheets 的每一種「格式」（字型、填色、框線、數字格式……）在檔案底層
+        都是 <span class="num">xl/styles.xml</span> 裡的一筆資料，儲存格只記錄「我用第幾號格式」。
+        只要你是在應用程式介面上操作，介面會幫你正確維護這個編號對照表。但如果程式直接產生 XML、
+        或是檔案被 Google Sheets 重新整個轉存過，這個編號對照表就可能被打散重排——這時候任何
+        「寫死格式編號」的程式碼，隔天可能就對應到完全不同的格式了。
+      </div>
+
+      <p class="formula-label">技術規則 1／2：樣式索引不要寫死，每次動態查</p>
+      <p>
+        與其在程式裡寫 <span class="num">style = 75</span> 這種寫死的數字，不如在每次執行時，
+        從一個「一定拿得到、格式一定正確」的來源儲存格，動態讀出它<em>目前</em>實際在用的格式編號。
+        以「報酬日曆」為例：日期格式抓自歷史資料表的日期欄、百分比格式抓自歷史資料表的報酬率欄，
+        邏輯上永遠正確，不管底層編號怎麼重排都跟得上。
+      </p>
+      <div class="formula">
+<span class="muted"># 概念示意：從歷史資料表 A2 儲存格，動態讀出「現在」代表日期格式的編號</span>
+def get_date_style(sheet_xml):
+    m = re.search(r'&lt;c r="A2" s="(\d+)"', sheet_xml)
+    return int(m.group(1)) if m else FALLBACK_STYLE</div>
+      <p>
+        同理，如果要「修改某個格式的某個屬性」（例如只改字色，其他不動），做法是：複製那個格式的
+        完整定義、只換掉你要改的那個屬性、拿去跟現有格式清單逐一比對——<strong>如果已經有一模一樣的
+        就重用那個編號，沒有才在清單最後面新增一筆</strong>（append-only）。這樣同一組修改重複執行
+        多次，結果都收斂在同一個編號上，不會每次都疊加出新格式（也就是「冪等」）。
+      </p>
+
+      <p class="formula-label">技術規則 3：月曆區塊自動增長的範圍怎麼算</p>
+      <p>
+        月曆不是寫死「這個月＋上個月」兩份，而是「從資料最新的月份，往回堆到最早那個月」。
+        其中最早那個月<strong>只有在它不是從 1 號開始時才排除</strong>——帳戶剛開通常只有月中
+        幾天的零碎資料，建一份幾乎全空的月曆沒有意義；但如果最早那天剛好就是 1 號，那是完整的
+        一個月，排除掉反而平白少一份。這樣寫的好處是：資料每多存在一個月，月曆自動多一份，
+        不用回頭改程式或手動加。
+      </p>
+      <div class="formula">
+<span class="muted"># 概念示意：由新到舊列出所有月份，只有最早那個「零碎月」才排除</span>
+def month_sequence(dates):
+    latest, earliest = max(dates), min(dates)
+    y, m = latest.year, latest.month
+    seq = []
+    while True:
+        seq.append((y, m))
+        if (y, m) == (earliest.year, earliest.month):
+            break
+        y, m = prev_month(y, m)
+    if earliest.day != 1 and len(seq) &gt; 1:
+        seq.pop()          <span class="muted"># 最早那個月是半路開始的，跳過</span>
+    return seq</div>
+
+      <p class="formula-label">技術規則 4：手動備註要用「日期」定位，不能用儲存格座標</p>
+      <p>
+        因為整份表格是<strong>每次都整段重寫</strong>（不是只改有變動的地方，是把整張表砍掉重建），
+        任何你手動加在儲存格裡的東西——備註文字、特別標記的顏色——下一次自動更新都會被蓋掉，
+        除非把這些「例外」也登記進程式的設定裡，讓程式自己在每次重建之後，把它們套用回<em>當時
+        算出來</em>的正確位置。因為月曆區塊每天都會因為資料變多而往下移動，「座標」（例如
+        「A187」）本身留不住，只有「日期」（例如「6月8日」）是不會變的錨點。
+      </p>
+      <div class="formula">
+<span class="muted"># 概念示意：用日期記錄備註，重建時反查該日期現在落在哪一格再套用</span>
+DAY_NOTES = {"2026/06/08": "8，匯入50萬"}
+
+for date_str, note in DAY_NOTES.items():
+    cell_ref = find_cell_for_date(rebuilt_calendar, date_str)   # 每次重新算
+    apply_note(cell_ref, note)</div>
+      <div class="callout warn">
+        <span class="icon">⚠</span>
+        <p>反過來說，<strong>沒有登記進設定清單的手動修改，下次重建都會被蓋掉</strong>——這是
+        「整段重寫」架構必然的取捨：換來的是格式規則永遠一致、不會累積出一堆手動修補的分歧版本，
+        代價是任何例外都要明確登記，不能只在畫面上偷改一下。</p>
+      </div>
+
+      <p class="formula-label">技術規則 5：列號一律用算的，整份檔案不准出現寫死的列號</p>
+      <p>
+        本月月曆放最上面之後，每日漲跌表的起始列就<strong>不再是固定的</strong>——這個月有 5 週
+        還是 6 週、月曆長幾列，都會把下面整批往下推。所以重建流程要改成「<strong>一個游標從第 1 列
+        往下走</strong>」：每放完一個區塊就把游標推到它的下一個空列，並把每個區塊的起訖列<em>記下來</em>，
+        後面所有東西都引用這些變數。
+      </p>
+      <div class="formula">
+<span class="muted"># 概念示意：所有列號都是算出來的，回傳給後續步驟共用</span>
+row = 1
+row = emit_calendar(this_month, start=row)      <span class="muted"># 本月月曆</span>
+title_row  = row                                 <span class="muted"># 每日表格標題</span>
+header_row = title_row + 1
+agg_row    = header_row + 1                      <span class="muted"># 加總列</span>
+data_start = agg_row + 1                         <span class="muted"># 最新一天</span>
+data_end   = data_start + len(history) - 2       <span class="muted"># 最舊的逐日列</span>
+row = data_end + 2
+for cal in older_months:                         <span class="muted"># 其餘月份接在下面</span>
+    row = emit_calendar(cal, start=row)</div>
+      <p>
+        接著，<strong>每一個跟列號有關的產出都要吃這些變數</strong>，一個都不能漏：
+        加總列的 SUM／MAX 範圍、條件式格式的 sqref、折線圖的資料範圍與錨點列、
+        每個長條圖的錨點列、個別儲存格的字級覆寫。漏掉任何一個，它就會停在昨天的位置，
+        隔天資料一多就對不上了。
+      </p>
+      <div class="callout">
+        <span class="icon">✅</span>
+        <p><strong>驗收方式：對自己的產出再跑一次</strong>。把重建後的檔案當成輸入，
+        原封不動再重建一次，比對兩次的結果——<strong>目標分頁應該是零差異</strong>。
+        有差異就代表某個地方不是純粹由資料算出來的（可能疊加了樣式、或列號算錯），
+        這個檢查抓得到絕大多數的位移類 bug。</p>
+      </div>
+
+      <p class="formula-label">技術規則 6：列序反轉，改圖表的讀法而不是改資料</p>
+      <p>
+        表格改成由新到舊之後，圖表如果照抄就會變成左新右舊。正確做法是只改
+        <strong>類別軸的方向</strong>，資料範圍照舊：
+      </p>
+      <div class="formula">
+<span class="muted">&lt;!-- OOXML：類別軸反轉，資料不動 --&gt;</span>
+&lt;c:catAx&gt;
+  &lt;c:scaling&gt;&lt;c:orientation val="maxMin"/&gt;&lt;/c:scaling&gt;   <span class="muted">← 就這一行</span>
+&lt;/c:catAx&gt;</div>
+      <p>
+        雙軸圖有兩組軸，<strong>兩個類別軸都要一起改</strong>（其中一個通常是
+        <span class="num">delete="1"</span> 的隱藏軸，很容易漏掉，漏掉的話兩組數列
+        會朝相反方向畫，圖會完全對不起來）。
+      </p>
+    </section>
+  </main>
+</div>
+
+<footer class="page-foot">
+  這套結構最早用在「每日漲跌」＋「報酬日曆」，之後複製一份改公式來源，
+  同樣的做法就能套用在任何一個帳戶或資產類別上。<br>
+  <span style="opacity:0.75;">最後更新 2026-10-01｜現行版面：本月月曆置頂、日期由新到舊、加總列釘在表頭正下方。</span>
+</footer>
+
+</body>
+</html>
