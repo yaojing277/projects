@@ -374,6 +374,83 @@
   @media (prefers-reduced-motion: reduce) {
     * { transition: none !important; }
   }
+  /* ---------- 試算表模擬圖（畫成分頁實際長相；刻意不跟著明暗主題走，
+       因為分頁本身就是強制白底黑字，見規則 6） ---------- */
+  :root {
+    --sheet-paper: #ffffff;
+    --sheet-ink: #202124;
+    --sheet-grid: #c4ccd4;
+    --sheet-band: #eceff2;
+    --sheet-band-ink: #5b6472;
+    --sheet-pos: #dc2626;
+    --sheet-neg: #047857;
+    --sheet-pos-bg: #fdeceb;
+    --sheet-neg-bg: #e6f4ec;
+    --sheet-yellow: #ffff00;
+    --sheet-yellow-3: #fff2cc;
+  }
+
+  figure.shot { margin: 1.2rem 0 0; display: flex; flex-direction: column; gap: 0.5rem; }
+  figure.shot figcaption {
+    font-size: 0.82rem; color: var(--text-muted); max-width: 68ch;
+  }
+  figure.shot figcaption b { color: var(--text); font-weight: 600; }
+
+  .sheet-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    background: var(--sheet-band);
+  }
+  .sheet {
+    display: grid;
+    gap: 1px;
+    padding: 1px;
+    background: var(--sheet-grid);
+    font-family: "IBM Plex Mono", "PingFang TC", monospace;
+    font-size: 0.72rem;
+    line-height: 1.5;
+    font-variant-numeric: tabular-nums;
+  }
+  .sheet > div {
+    background: var(--sheet-paper);
+    color: var(--sheet-ink);
+    padding: 0.28rem 0.45rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .sheet .ch, .sheet .rh {
+    background: var(--sheet-band);
+    color: var(--sheet-band-ink);
+    text-align: center;
+    font-size: 0.66rem;
+  }
+  .sheet .r { text-align: right; }
+  .sheet .c { text-align: center; }
+  .sheet .pos { color: var(--sheet-pos); }
+  .sheet .neg { color: var(--sheet-neg); }
+  .sheet .fill-pos { background: var(--sheet-pos-bg); color: var(--sheet-pos); }
+  .sheet .fill-neg { background: var(--sheet-neg-bg); color: var(--sheet-neg); }
+  .sheet .y3 { background: var(--sheet-yellow-3); }
+  .sheet .hl { background: var(--sheet-yellow); font-weight: 700; }
+  .sheet .title { font-weight: 700; text-align: center; }
+  .sheet .hdr { font-weight: 600; background: #f6f8f9; }
+  .sheet .agg { font-weight: 600; }
+  .sheet .small { font-size: 0.62rem; }
+  .sheet .dim { color: #9aa5b1; }
+  .sheet .ell { text-align: center; color: #9aa5b1; letter-spacing: 0.2em; }
+
+  .chart-shot {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--surface);
+    box-shadow: var(--shadow);
+    padding: 0.8rem;
+    overflow-x: auto;
+  }
+  .chart-shot svg { display: block; min-width: 520px; max-width: 100%; height: auto; }
 </style>
 </head>
 <body>
@@ -533,6 +610,10 @@
         打開表格第一眼就是最新的一天，跟上面的本月月曆看到的是同一件事。
       </p>
 
+<figure class="shot">
+<div class="sheet-wrap"><div class="sheet" style="grid-template-columns:34px 92px repeat(5,minmax(74px,1fr)) 68px;min-width:640px;"><div class="ch"></div><div class="ch">A</div><div class="ch">B</div><div class="ch">C</div><div class="ch">D</div><div class="ch">E</div><div class="ch">F</div><div class="ch">G</div><div class="rh">22</div><div class="title" style="grid-column:span 7">03_國泰漲跌｜每日總市值與損益變化</div><div class="rh">23</div><div class="hdr c">日期</div><div class="hdr c">總市值</div><div class="hdr c">未實現損益</div><div class="hdr c small">單日損益<br>漲跌</div><div class="hdr c">淨投入資金</div><div class="hdr c">單日市值漲跌</div><div class="hdr c small">單日<br>報酬率</div><div class="rh">24</div><div class="agg small">累計26/01至今</div><div class="r agg">903,210</div><div class="r agg">196,454</div><div class="r agg pos">+196,183</div><div class="r agg">670,467</div><div class="r agg">+866,650</div><div class="r agg">21.7%</div><div class="rh">25</div><div class="c">2026/09/30</div><div class="r">902,950</div><div class="r">196,194</div><div class="r pos">+15,735</div><div class="r">0</div><div class="r pos">+15,735</div><div class="r pos">1.8%</div><div class="rh">26</div><div class="c">2026/09/29</div><div class="r">887,215</div><div class="r">180,459</div><div class="r neg">-13,515</div><div class="r">0</div><div class="r neg">-13,515</div><div class="r neg">-1.5%</div><div class="rh">27</div><div class="c">2026/09/24</div><div class="r">900,730</div><div class="r">193,974</div><div class="r neg">-2,480</div><div class="r">0</div><div class="r neg">-2,480</div><div class="r neg">-0.3%</div><div class="rh">⋮</div><div class="ell" style="grid-column:span 7">⋮</div><div class="rh">36</div><div class="c">2026/09/11</div><div class="r">836,040</div><div class="r">129,284</div><div class="r neg">-24,527</div><div class="r">17,872</div><div class="r neg">-6,655</div><div class="r neg">-2.9%</div><div class="rh">⋮</div><div class="ell" style="grid-column:span 7">⋮</div><div class="rh">44</div><div class="c">2026/09/01</div><div class="r">844,885</div><div class="r">156,001</div><div class="r pos">+29,490</div><div class="r">0</div><div class="r pos">+29,490</div><div class="r pos y3">3.6%</div><div class="rh">⋮</div><div class="ell" style="grid-column:span 7">⋮</div><div class="rh">183</div><div class="c">2026/01/30</div><div class="r">36,300</div><div class="r">11</div><div class=""></div><div class=""></div><div class=""></div><div class=""></div></div></div>
+<figcaption>實際畫面（03_國泰漲跌）。<b>第 24 列</b>是累計，釘在表頭正下方；<b>第 25 列</b>永遠是最新一天，往下越來越舊。9/11 那列的「淨投入資金」17,872 是當天買進的金額，所以市值只掉 6,655、損益卻掉 24,527——兩個數字會不一樣就是這個原因。9/1 的報酬率 3.6% 超過 3%，整格套上最淺的黃底。最後一列（183）是最早那一天，沒有前一天可比，D~G 自動留空。</figcaption>
+</figure>
       <p class="formula-label">逐日列：用輔助欄把「由舊到新」倒著讀出來</p>
       <p>
         歷史表是由舊到新，這張表要由新到舊，中間需要一個換算。最好懂的做法是開一個
@@ -670,6 +751,11 @@ G24 <span class="muted">累計報酬率</span>     =D24/B24              <span c
         <li><strong>副軸（右）</strong>：單日損益漲跌（D 欄）— 量級小很多，獨立一軸才看得出波動</li>
         <li><strong>類別軸</strong>：日期（A 欄）</li>
       </ul>
+<figure class="shot">
+<div class="chart-shot"><svg viewBox="0 0 720 300" role="img" aria-label="2026年9月 總市值與損益走勢"><rect x="0" y="0" width="720" height="300" fill="none"/><line x1="62" y1="254.0" x2="662" y2="254.0" stroke="var(--border)" stroke-width="1"/><text x="54" y="258.0" text-anchor="end" font-size="10" fill="var(--text-muted)">0k</text><line x1="62" y1="208.4" x2="662" y2="208.4" stroke="var(--border)" stroke-width="1"/><text x="54" y="212.4" text-anchor="end" font-size="10" fill="var(--text-muted)">190k</text><line x1="62" y1="162.8" x2="662" y2="162.8" stroke="var(--border)" stroke-width="1"/><text x="54" y="166.8" text-anchor="end" font-size="10" fill="var(--text-muted)">380k</text><line x1="62" y1="117.2" x2="662" y2="117.2" stroke="var(--border)" stroke-width="1"/><text x="54" y="121.2" text-anchor="end" font-size="10" fill="var(--text-muted)">570k</text><line x1="62" y1="71.6" x2="662" y2="71.6" stroke="var(--border)" stroke-width="1"/><text x="54" y="75.6" text-anchor="end" font-size="10" fill="var(--text-muted)">760k</text><line x1="62" y1="26.0" x2="662" y2="26.0" stroke="var(--border)" stroke-width="1"/><text x="54" y="30.0" text-anchor="end" font-size="10" fill="var(--text-muted)">950k</text><text x="670" y="250.9" text-anchor="start" font-size="10" fill="var(--text-muted)">-30k</text><text x="670" y="197.4" text-anchor="start" font-size="10" fill="var(--text-muted)">-15k</text><text x="670" y="144.0" text-anchor="start" font-size="10" fill="var(--text-muted)">+0k</text><text x="670" y="90.6" text-anchor="start" font-size="10" fill="var(--text-muted)">+15k</text><text x="670" y="37.1" text-anchor="start" font-size="10" fill="var(--text-muted)">+30k</text><line x1="62" y1="140.0" x2="662" y2="140.0" stroke="var(--text-muted)" stroke-width="1" stroke-dasharray="3 3" opacity="0.5"/><text x="62.0" y="270" text-anchor="middle" font-size="10" fill="var(--text-muted)">9/1</text><text x="156.7" y="270" text-anchor="middle" font-size="10" fill="var(--text-muted)">9/4</text><text x="251.5" y="270" text-anchor="middle" font-size="10" fill="var(--text-muted)">9/9</text><text x="346.2" y="270" text-anchor="middle" font-size="10" fill="var(--text-muted)">9/14</text><text x="440.9" y="270" text-anchor="middle" font-size="10" fill="var(--text-muted)">9/17</text><text x="535.7" y="270" text-anchor="middle" font-size="10" fill="var(--text-muted)">9/22</text><text x="630.4" y="270" text-anchor="middle" font-size="10" fill="var(--text-muted)">9/29</text><polyline points="62.0,51.2 93.6,57.7 125.2,60.4 156.7,54.0 188.3,48.2 219.9,50.1 251.5,49.8 283.1,51.8 314.6,53.4 346.2,56.1 377.8,57.8 409.4,55.4 440.9,51.1 472.5,44.7 504.1,40.4 535.7,39.5 567.3,37.2 598.8,37.8 630.4,41.1 662.0,37.3" fill="none" stroke="#2e75b6" stroke-width="2" stroke-linejoin="round"/><circle cx="62.0" cy="51.2" r="2.4" fill="#2e75b6"/><circle cx="93.6" cy="57.7" r="2.4" fill="#2e75b6"/><circle cx="125.2" cy="60.4" r="2.4" fill="#2e75b6"/><circle cx="156.7" cy="54.0" r="2.4" fill="#2e75b6"/><circle cx="188.3" cy="48.2" r="2.4" fill="#2e75b6"/><circle cx="219.9" cy="50.1" r="2.4" fill="#2e75b6"/><circle cx="251.5" cy="49.8" r="2.4" fill="#2e75b6"/><circle cx="283.1" cy="51.8" r="2.4" fill="#2e75b6"/><circle cx="314.6" cy="53.4" r="2.4" fill="#2e75b6"/><circle cx="346.2" cy="56.1" r="2.4" fill="#2e75b6"/><circle cx="377.8" cy="57.8" r="2.4" fill="#2e75b6"/><circle cx="409.4" cy="55.4" r="2.4" fill="#2e75b6"/><circle cx="440.9" cy="51.1" r="2.4" fill="#2e75b6"/><circle cx="472.5" cy="44.7" r="2.4" fill="#2e75b6"/><circle cx="504.1" cy="40.4" r="2.4" fill="#2e75b6"/><circle cx="535.7" cy="39.5" r="2.4" fill="#2e75b6"/><circle cx="567.3" cy="37.2" r="2.4" fill="#2e75b6"/><circle cx="598.8" cy="37.8" r="2.4" fill="#2e75b6"/><circle cx="630.4" cy="41.1" r="2.4" fill="#2e75b6"/><circle cx="662.0" cy="37.3" r="2.4" fill="#2e75b6"/><polyline points="62.0,216.6 93.6,223.1 125.2,225.7 156.7,219.3 188.3,213.5 219.9,215.4 251.5,215.2 283.1,217.1 314.6,218.7 346.2,225.8 377.8,227.4 409.4,225.0 440.9,220.8 472.5,214.3 504.1,210.0 535.7,209.2 567.3,206.9 598.8,207.4 630.4,210.7 662.0,206.9" fill="none" stroke="#548235" stroke-width="2" stroke-linejoin="round"/><circle cx="62.0" cy="216.6" r="2.4" fill="#548235"/><circle cx="93.6" cy="223.1" r="2.4" fill="#548235"/><circle cx="125.2" cy="225.7" r="2.4" fill="#548235"/><circle cx="156.7" cy="219.3" r="2.4" fill="#548235"/><circle cx="188.3" cy="213.5" r="2.4" fill="#548235"/><circle cx="219.9" cy="215.4" r="2.4" fill="#548235"/><circle cx="251.5" cy="215.2" r="2.4" fill="#548235"/><circle cx="283.1" cy="217.1" r="2.4" fill="#548235"/><circle cx="314.6" cy="218.7" r="2.4" fill="#548235"/><circle cx="346.2" cy="225.8" r="2.4" fill="#548235"/><circle cx="377.8" cy="227.4" r="2.4" fill="#548235"/><circle cx="409.4" cy="225.0" r="2.4" fill="#548235"/><circle cx="440.9" cy="220.8" r="2.4" fill="#548235"/><circle cx="472.5" cy="214.3" r="2.4" fill="#548235"/><circle cx="504.1" cy="210.0" r="2.4" fill="#548235"/><circle cx="535.7" cy="209.2" r="2.4" fill="#548235"/><circle cx="567.3" cy="206.9" r="2.4" fill="#548235"/><circle cx="598.8" cy="207.4" r="2.4" fill="#548235"/><circle cx="630.4" cy="210.7" r="2.4" fill="#548235"/><circle cx="662.0" cy="206.9" r="2.4" fill="#548235"/><polyline points="62.0,34.9 93.6,236.7 125.2,179.0 156.7,45.2 188.3,53.8 219.9,168.4 251.5,136.1 283.1,168.7 314.6,227.4 346.2,181.5 377.8,164.3 409.4,103.9 440.9,77.5 472.5,43.8 504.1,76.5 535.7,127.5 567.3,105.7 598.8,148.8 630.4,188.1 662.0,83.9" fill="none" stroke="#ed7d31" stroke-width="2" stroke-linejoin="round"/><circle cx="62.0" cy="34.9" r="2.4" fill="#ed7d31"/><circle cx="93.6" cy="236.7" r="2.4" fill="#ed7d31"/><circle cx="125.2" cy="179.0" r="2.4" fill="#ed7d31"/><circle cx="156.7" cy="45.2" r="2.4" fill="#ed7d31"/><circle cx="188.3" cy="53.8" r="2.4" fill="#ed7d31"/><circle cx="219.9" cy="168.4" r="2.4" fill="#ed7d31"/><circle cx="251.5" cy="136.1" r="2.4" fill="#ed7d31"/><circle cx="283.1" cy="168.7" r="2.4" fill="#ed7d31"/><circle cx="314.6" cy="227.4" r="2.4" fill="#ed7d31"/><circle cx="346.2" cy="181.5" r="2.4" fill="#ed7d31"/><circle cx="377.8" cy="164.3" r="2.4" fill="#ed7d31"/><circle cx="409.4" cy="103.9" r="2.4" fill="#ed7d31"/><circle cx="440.9" cy="77.5" r="2.4" fill="#ed7d31"/><circle cx="472.5" cy="43.8" r="2.4" fill="#ed7d31"/><circle cx="504.1" cy="76.5" r="2.4" fill="#ed7d31"/><circle cx="535.7" cy="127.5" r="2.4" fill="#ed7d31"/><circle cx="567.3" cy="105.7" r="2.4" fill="#ed7d31"/><circle cx="598.8" cy="148.8" r="2.4" fill="#ed7d31"/><circle cx="630.4" cy="188.1" r="2.4" fill="#ed7d31"/><circle cx="662.0" cy="83.9" r="2.4" fill="#ed7d31"/><text x="62" y="16" font-size="11" fill="var(--text-muted)">左軸：<tspan fill="#2e75b6">總市值</tspan>、<tspan fill="#548235">未實現損益</tspan>　右軸：<tspan fill="#ed7d31">單日損益漲跌</tspan></text><text x="662" y="286" text-anchor="end" font-size="10" fill="var(--text-muted)">左舊右新（類別軸已反轉）→</text></svg></div>
+<figcaption>實際畫面（2026 年 9 月）。表格裡日期是<b>由新到舊</b>，圖表卻仍然<b>左舊右新</b>——差別只在類別軸勾了「反轉順序」，底下的資料範圍完全沒有另外做一份。橘線（單日損益漲跌）量級只有藍線的百分之一，所以掛在右軸，不然會被壓成一條直線。</figcaption>
+</figure>
+
       <div class="callout warn">
         <span class="icon">⚠</span>
         <p>
@@ -721,6 +807,10 @@ G24 <span class="muted">累計報酬率</span>     =D24/B24              <span c
           </tbody>
         </table>
       </div>
+<figure class="shot">
+<div class="sheet-wrap"><div class="sheet" style="grid-template-columns:34px repeat(5,minmax(76px,1fr)) 84px;min-width:600px;"><div class="ch"></div><div class="ch">A</div><div class="ch">B</div><div class="ch">C</div><div class="ch">D</div><div class="ch">E</div><div class="ch">F</div><div class="rh">1</div><div class="hl" style="grid-column:span 3">2026年9月報酬日曆</div><div class="c">月損益</div><div class="r pos">69,683</div><div class="r pos">8.5%</div><div class="rh">2</div><div class="c hdr">一</div><div class="c hdr">二</div><div class="c hdr">三</div><div class="c hdr">四</div><div class="c hdr">五</div><div class="c hdr">週損益</div><div class="rh">3</div><div class="c"></div><div class="c">1</div><div class="c">2</div><div class="c">3</div><div class="c">4</div><div></div><div class="rh">4</div><div class="r"></div><div class="r fill-pos">+29,490</div><div class="r fill-neg">-27,135</div><div class="r fill-neg">-10,955</div><div class="r fill-pos">+26,600</div><div class="r pos">+18,000</div><div class="rh">5</div><div class="r"></div><div class="r fill-pos">3.6%</div><div class="r fill-neg">-3.2%</div><div class="r fill-neg">-1.3%</div><div class="r fill-pos">3.3%</div><div class="r pos">2.2%</div><div class="rh">6</div><div class="c">7</div><div class="c">8</div><div class="c">9</div><div class="c">10</div><div class="c">11</div><div></div><div class="rh">7</div><div class="r fill-pos">+24,205</div><div class="r fill-neg">-7,965</div><div class="r fill-pos">+1,105</div><div class="r fill-neg">-8,045</div><div class="r fill-neg">-24,527</div><div class="r neg">-15,227</div><div class="rh">8</div><div class="r fill-pos">2.9%</div><div class="r fill-neg">-0.9%</div><div class="r fill-pos">0.1%</div><div class="r fill-neg">-0.9%</div><div class="r fill-neg">-2.9%</div><div class="r neg">-1.8%</div><div class="rh">9</div><div class="c">14</div><div class="c">15</div><div class="c">16</div><div class="c">17</div><div class="c">18</div><div></div><div class="rh">10</div><div class="r fill-neg">-11,655</div><div class="r fill-neg">-6,830</div><div class="r fill-pos">+10,125</div><div class="r fill-pos">+17,550</div><div class="r fill-pos">+27,010</div><div class="r pos">+36,200</div><div class="rh">11</div><div class="r fill-neg">-1.4%</div><div class="r fill-neg">-0.8%</div><div class="r fill-pos">1.2%</div><div class="r fill-pos">2.1%</div><div class="r fill-pos">3.2%</div><div class="r pos">4.3%</div><div class="rh">12</div><div class="c">21</div><div class="c">22</div><div class="c">23</div><div class="c">24</div><div class="c">25</div><div></div><div class="rh">13</div><div class="r fill-pos">+17,830</div><div class="r fill-pos">+3,510</div><div class="r fill-pos">+9,630</div><div class="r fill-neg">-2,480</div><div class="r"></div><div class="r pos">+28,490</div><div class="rh">14</div><div class="r fill-pos">2.0%</div><div class="r fill-pos">0.4%</div><div class="r fill-pos">1.1%</div><div class="r fill-neg">-0.3%</div><div class="r"></div><div class="r pos">3.3%</div><div class="rh">15</div><div class="c">28</div><div class="c">29</div><div class="c">30</div><div class="c"></div><div class="c"></div><div></div><div class="rh">16</div><div class="r"></div><div class="r fill-neg">-13,515</div><div class="r fill-pos">+15,735</div><div class="r"></div><div class="r"></div><div class="r pos">+2,220</div><div class="rh">17</div><div class="r"></div><div class="r fill-neg">-1.5%</div><div class="r fill-pos">1.8%</div><div class="r"></div><div class="r"></div><div class="r pos">0.2%</div><div class="rh">18</div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div><div></div><div class="rh">19</div><div class="r"></div><div class="r"></div><div class="r"></div><div class="r"></div><div class="r"></div><div class="r"></div><div class="rh">20</div><div class="r"></div><div class="r"></div><div class="r"></div><div class="r"></div><div class="r"></div><div class="r"></div></div></div>
+<figcaption>實際畫面（03_國泰漲跌 第 1~20 列，整張分頁最上面）。一週佔 3 列：<b>日期／金額／百分比</b>，右邊 F 欄是該週小計。9/25、9/28 沒有開盤資料就留空，最後一週（第 18~20 列）當月用不到也照樣保留——這就是「固定 6 週骨架」，月曆高度每個月都一樣，長條圖的位置才不用每月重調。</figcaption>
+</figure>
       <p>每一格金額，用 <span class="num">VLOOKUP</span> 或 <span class="num">INDEX/MATCH</span> 拿「每日漲跌表」裡對應那天的 D 欄（單日損益漲跌）：</p>
       <div class="formula">
 =IFERROR(INDEX(<span class="cellname">每日漲跌</span>!$D$25:$D$182,
@@ -765,6 +855,11 @@ G24 <span class="muted">累計報酬率</span>     =D24/B24              <span c
     <section id="step5">
       <div class="step-head"><span class="step-n">05</span><h2>加上逐日長條圖</h2></div>
       <p>用月曆區塊裡的「金額列」（每週 3 列裡的第 2 列）畫長條圖，正值紅色、負值綠色。</p>
+<figure class="shot">
+<div class="chart-shot"><svg viewBox="0 0 720 250" role="img" aria-label="2026年9月 逐日損益長條圖"><line x1="52" y1="204.1" x2="704" y2="204.1" stroke="var(--border)" stroke-width="1"/><text x="44" y="208.1" text-anchor="end" font-size="10" fill="var(--text-muted)">-30k</text><line x1="52" y1="159.5" x2="704" y2="159.5" stroke="var(--border)" stroke-width="1"/><text x="44" y="163.5" text-anchor="end" font-size="10" fill="var(--text-muted)">-15k</text><line x1="52" y1="115.0" x2="704" y2="115.0" stroke="var(--border)" stroke-width="1"/><text x="44" y="119.0" text-anchor="end" font-size="10" fill="var(--text-muted)">+0k</text><line x1="52" y1="70.5" x2="704" y2="70.5" stroke="var(--border)" stroke-width="1"/><text x="44" y="74.5" text-anchor="end" font-size="10" fill="var(--text-muted)">+15k</text><line x1="52" y1="25.9" x2="704" y2="25.9" stroke="var(--border)" stroke-width="1"/><text x="44" y="29.9" text-anchor="end" font-size="10" fill="var(--text-muted)">+30k</text><rect x="58.2" y="27.5" width="20.2" height="87.5" fill="#dc2626" rx="1.5"/><text x="68.3" y="226" text-anchor="middle" font-size="9" fill="var(--text-muted)">1</text><rect x="90.8" y="115.0" width="20.2" height="80.6" fill="#047857" rx="1.5"/><text x="100.9" y="226" text-anchor="middle" font-size="9" fill="var(--text-muted)">2</text><rect x="123.4" y="115.0" width="20.2" height="32.5" fill="#047857" rx="1.5"/><text x="133.5" y="226" text-anchor="middle" font-size="9" fill="var(--text-muted)">3</text><rect x="156.0" y="36.0" width="20.2" height="79.0" fill="#dc2626" rx="1.5"/><text x="166.1" y="226" text-anchor="middle" font-size="9" fill="var(--text-muted)">4</text><rect x="188.6" y="43.1" width="20.2" height="71.9" fill="#dc2626" rx="1.5"/><text x="198.7" y="226" text-anchor="middle" font-size="9" fill="var(--text-muted)">7</text><rect x="221.2" y="115.0" width="20.2" height="23.6" fill="#047857" rx="1.5"/><text x="231.3" y="226" text-anchor="middle" font-size="9" fill="var(--text-muted)">8</text><rect x="253.8" y="111.7" width="20.2" height="3.3" fill="#dc2626" rx="1.5"/><text x="263.9" y="226" text-anchor="middle" font-size="9" fill="var(--text-muted)">9</text><rect x="286.4" y="115.0" width="20.2" height="23.9" fill="#047857" rx="1.5"/><text x="296.5" y="226" text-anchor="middle" font-size="9" fill="var(--text-muted)">10</text><rect x="319.0" y="115.0" width="20.2" height="72.8" fill="#047857" rx="1.5"/><text x="329.1" y="226" text-anchor="middle" font-size="9" fill="var(--text-muted)">11</text><rect x="351.6" y="115.0" width="20.2" height="34.6" fill="#047857" rx="1.5"/><text x="361.7" y="226" text-anchor="middle" font-size="9" fill="var(--text-muted)">14</text><rect x="384.2" y="115.0" width="20.2" height="20.3" fill="#047857" rx="1.5"/><text x="394.3" y="226" text-anchor="middle" font-size="9" fill="var(--text-muted)">15</text><rect x="416.8" y="84.9" width="20.2" height="30.1" fill="#dc2626" rx="1.5"/><text x="426.9" y="226" text-anchor="middle" font-size="9" fill="var(--text-muted)">16</text><rect x="449.4" y="62.9" width="20.2" height="52.1" fill="#dc2626" rx="1.5"/><text x="459.5" y="226" text-anchor="middle" font-size="9" fill="var(--text-muted)">17</text><rect x="482.0" y="34.8" width="20.2" height="80.2" fill="#dc2626" rx="1.5"/><text x="492.1" y="226" text-anchor="middle" font-size="9" fill="var(--text-muted)">18</text><rect x="514.6" y="62.1" width="20.2" height="52.9" fill="#dc2626" rx="1.5"/><text x="524.7" y="226" text-anchor="middle" font-size="9" fill="var(--text-muted)">21</text><rect x="547.2" y="104.6" width="20.2" height="10.4" fill="#dc2626" rx="1.5"/><text x="557.3" y="226" text-anchor="middle" font-size="9" fill="var(--text-muted)">22</text><rect x="579.8" y="86.4" width="20.2" height="28.6" fill="#dc2626" rx="1.5"/><text x="589.9" y="226" text-anchor="middle" font-size="9" fill="var(--text-muted)">23</text><rect x="612.4" y="115.0" width="20.2" height="7.4" fill="#047857" rx="1.5"/><text x="622.5" y="226" text-anchor="middle" font-size="9" fill="var(--text-muted)">24</text><rect x="645.0" y="115.0" width="20.2" height="40.1" fill="#047857" rx="1.5"/><text x="655.1" y="226" text-anchor="middle" font-size="9" fill="var(--text-muted)">29</text><rect x="677.6" y="68.3" width="20.2" height="46.7" fill="#dc2626" rx="1.5"/><text x="687.7" y="226" text-anchor="middle" font-size="9" fill="var(--text-muted)">30</text><line x1="52" y1="115.0" x2="704" y2="115.0" stroke="var(--text-muted)" stroke-width="1"/></svg></div>
+<figcaption>實際畫面（2026 年 9 月，資料就是上面月曆的「金額列」）。<b>紅色是賺、綠色是賠</b>，跟月曆的紅綠一致；9/25、9/28 沒有開盤，該格留空所以圖上直接缺一根，不必補 0。</figcaption>
+</figure>
+
       <div class="callout warn">
         <span class="icon">⚠</span>
         <p><strong>這一步最容易踩雷</strong>：資料來源一定要用「多重範圍的儲存格參照」
