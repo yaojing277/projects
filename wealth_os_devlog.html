@@ -45,6 +45,35 @@ pre{background:#0f172a;color:#e2e8f0;padding:12px 16px;border-radius:8px;overflo
 <code>wealth_sync.yml</code> 排程在這段期間的開發、修 bug 與持股維護操作。維護的雲端檔案是
 <code>Jimmy_Wealth_OS_Master_V4.4_Google.xlsm</code>（Google Drive，就地覆蓋、檔案 ID 不變）。</div>
 
+<h2>2026-10-01　報酬日曆與每日表格金額加千分位（02_每日漲跌／03_國泰漲跌）</h2>
+<p><b>需求：</b>Jimmy 反映報酬日曆的金額（月損益、每日／週損益）沒有千分位不好讀，
+要求先改 <code>02_每日漲跌</code> 看效果，確認後再套到每日表格與 <code>03_國泰漲跌</code>。</p>
+<p><b>實作：</b><b>沒有直接改儲存格</b>——這兩張分頁每次同步都會被整張重建，手動改格式隔天排程就會被蓋掉，
+所以改在產生器。新增共用常數 <code>CAL_AMT_FMT = "#,##0"</code>，兩處套用：</p>
+<ul>
+<li><b>報酬日曆</b>：<code>_emit_calendar()</code> 比照既有的百分比作法，用
+<code>_ensure_numfmt()</code> + <code>_ensure_numfmt_style()</code> 把 <code>num</code> 角色換成帶千分位的樣式。
+這兩支都是 append-only 且冪等，不會重複新增樣式，也不會踩到樣式索引漂移。</li>
+<li><b>每日表格</b>：原 <code>_fix_daily_value_font_color()</code> 只負責把 B~F 欄強制黑字，
+現擴充為同時套千分位，並更名為 <code>_fix_daily_value_style()</code>。</li>
+</ul>
+<p><b>踩坑與解法：</b></p>
+<ul>
+<li><b>改名差點打斷排程。</b><code>update_cathay_daily.py</code> 是 <code>import update_wealth_os as uwo</code>
+直接共用這些 helper，改名後它第 312 行仍呼叫舊名，<b>下一次排程會 AttributeError</b>。
+跨檔共用的私有函式更名時，必須全專案搜尋呼叫端（本機與 <code>stock_notify_tmp</code> 兩份都要），
+並用 import 冒煙測試確認新名存在、舊名已移除。</li>
+<li><b>驗證範圍算錯造成假警報。</b>第一次檢查「每日表格 B~F 是否全部套用」時，列範圍上界寫錯而越界掃進
+下方的 8 月／7 月報酬日曆，報出 42 格未套用——實際那些是報酬率格（本來就該是 <code>0.0%</code>）。
+改成以「下一個報酬日曆標題列」為界重算後歸零。</li>
+<li><b>Jimmy 一度以為已經改好。</b>原因是我前一輪驗證輸出時自己用 <code>f"{v:,}"</code> 排版加了逗號，
+看起來像已有千分位。<b>驗證輸出應直接印 <code>number_format</code> 而非美化後的值</b>，否則會誤導。</li>
+</ul>
+<p><b>驗證結果：</b><code>02_每日漲跌</code> 每日表格列 24~87（64 列）B~F <b>0 格遺漏</b>、G 欄維持 <code>0.00%</code>；
+<code>03_國泰漲跌</code> 8 個月日曆（2~9 月）月損益與金額列全為 <code>#,##0</code>、每日表格列 24~183（160 列）亦 0 格遺漏；
+報酬率格未被誤改。日曆的 <code>_fix_daily_value_style</code> 列範圍限制經確認仍有效——兩個區塊共用
+<code>s="9"</code> 卻各走各的路，互不干擾。</p>
+
 <h2>2026-09-30　回填 9/24 賣出：讓成本變化落在成交日而非補記日</h2>
 <p><b>需求：</b>禾伸堂 9/24 賣出 200 股卻到 9/29 才補記，成本變化因此全落在 9/29，
 又與當天四筆買進互相抵銷成淨額 −39,367，Jimmy 從 <code>02_每日漲跌</code> 看不出賣出被計入，
