@@ -946,6 +946,10 @@
       <tbody>
         <tr>
           <td style="white-space:nowrap; color:var(--text3);">2026-10-02</td>
+          <td>🟢 <b>排程不再因「今天已建過快照」整個變紅</b>：<code>update_stock_price.py</code> 新增 <code>--skip-if-exists</code>，快照已存在時印訊息並正常結束（exit 0），workflow 帶上該參數。起因是當天排程遲到 6.5 小時、手動補跑在前，原本的 <code>exit 1</code> 讓 GitHub Actions <b>連坐跳過後面五步</b>——其中國泰漲跌／ETF除息日曆／跌幅查詢頁／正二分析<b>各自抓自己的資料、與該快照無關</b>，被跳過等於那天資料整天空缺。手動執行不帶參數時維持大聲中止</td>
+        </tr>
+        <tr>
+          <td style="white-space:nowrap; color:var(--text3);">2026-10-02</td>
           <td>📐 <b>新增「正二曝險上限」門檻並納入 AI 摘要</b>：<code>12_設定</code> B21＝70%，口徑為 <b>正二×2 ÷ 總曝險</b>（與 <code>04_ETF分析</code> C 欄一致），和既有 B13「正二目標上限」60%（口徑是<b>占股票市值</b>）是兩回事。同時新增 <code>OPTIONAL_SETTINGS_MAP</code>：後加的選用門檻缺值時退回預設並印警告，<b>不再像必填項那樣 <code>sys.exit</code></b>——避免一格空白就讓整個每日排程掛掉。依指示暫不納入安全指數扣分</td>
         </tr>
         <tr>

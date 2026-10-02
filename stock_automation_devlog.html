@@ -76,6 +76,29 @@ pre{background:#0f172a;color:#e2e8f0;padding:12px 16px;border-radius:8px;overflo
 （2026-07-25 分頁重編號後成為長期陷阱）</li>
 </ol></div>
 
+<h2>2026-10-02　排程遲到引發的連坐失敗：新增 --skip-if-exists<span class="tag">排程</span><span class="tag">基礎設施</span></h2>
+<p><b>需求：</b>當天排程遲到 6.5 小時未觸發，手動補跑後排程才姍姍來遲，
+結果整個 workflow 顯示 <b>failure</b>、LINE 推失敗通知，但資料其實是正確的。要讓這種情況不再誤報。</p>
+<p><b>實作：</b><code>update_stock_price.py</code> 的 <code>update</code> 新增 <code>--skip-if-exists</code>：
+當天快照分頁已存在時印訊息並<b>正常結束（exit 0）</b>而非 <code>sys.exit</code> 中止；
+<code>wealth_sync.yml</code> 的「更新股價」步驟帶上該參數。<b>手動執行不帶參數時維持大聲中止</b>的舊行為
+——那時候多半是真的想重跑，應該被明確告知，只是訊息裡補上提示有這個參數。</p>
+<p><b>踩坑與解法：</b></p>
+<ul>
+<li><b>失敗的代價遠大於「一個紅燈」。</b>原本以為只是誤報，查 job 步驟才發現
+<code>exit 1</code> 讓 GitHub Actions <b>連坐跳過後面五個步驟</b>。其中<b>四個步驟
+（國泰漲跌／ETF除息日曆／跌幅分布查詢頁／正二分析部署）各自抓自己的 TWSE 資料，
+與那份快照毫無關係</b>——被跳過等於那天這些資料整天空缺，而使用者只會看到一則 LINE 失敗通知，
+不會知道跌幅頁沒更新。<b>判斷一個失敗「無害」之前，要先看它連帶跳過了什麼。</b></li>
+<li><b>改錯了防呆。</b>第一版改的是 <code>new_title in props</code> 那道，實測才發現當天實際觸發的是
+更前面的 <code>new_title == src_title</code>（最新分頁本身就已是今天日期）。
+<b>兩道都要支援</b>。這也說明光讀程式碼不夠——拿真實資料跑一次才知道走哪條路。</li>
+</ul>
+<p><b>驗證結果：</b>以真實試算表實測兩種情境：不帶參數 → 維持 <code>exit 1</code> 並提示有此參數；
+帶 <code>--skip-if-exists</code> → 印
+「<code>[skip] 最新分頁已是當天日期「Jimmy_261002」…後續同步步驟照常進行</code>」且 <code>exit 0</code>。
+兩種情況都不會寫入任何資料（在建立副本前就返回）。</p>
+
 <h2>2026-09-30　記帳延遲的連鎖效應：成本口徑、缺漏還原與歷史回填<span class="tag">Wealth OS</span><span class="tag">記帳</span></h2>
 <p><b>需求：</b>貼 9/24 禾伸堂賣出截圖時已隔 5 天，衍生出三個問題：①<code>02_每日漲跌</code> 的
 「淨投入資金」把賣出算在補記日 9/29 而非成交日；②元大 App 顯示剩餘成本 894.76、試算表卻是 815.02；
