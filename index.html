@@ -288,7 +288,7 @@
     <h1>Jimmy 專案總覽</h1>
     <p>個人開發專案、工具程式與自動化腳本</p>
   </div>
-  <div class="last-updated" id="lastUpdated">最後更新：2026-10-01</div>
+  <div class="last-updated" id="lastUpdated">最後更新：2026-10-02</div>
 </header>
 
 <!-- ═══════════════════════════════════════
@@ -944,6 +944,10 @@
         <tr><th>日期</th><th>異動說明</th></tr>
       </thead>
       <tbody>
+        <tr>
+          <td style="white-space:nowrap; color:var(--text3);">2026-10-02</td>
+          <td>📐 <b>新增「正二曝險上限」門檻並納入 AI 摘要</b>：<code>12_設定</code> B21＝70%，口徑為 <b>正二×2 ÷ 總曝險</b>（與 <code>04_ETF分析</code> C 欄一致），和既有 B13「正二目標上限」60%（口徑是<b>占股票市值</b>）是兩回事。同時新增 <code>OPTIONAL_SETTINGS_MAP</code>：後加的選用門檻缺值時退回預設並印警告，<b>不再像必填項那樣 <code>sys.exit</code></b>——避免一格空白就讓整個每日排程掛掉。依指示暫不納入安全指數扣分</td>
+        </tr>
         <tr>
           <td style="white-space:nowrap; color:var(--text3);">2026-10-01</td>
           <td>🗑️ <b>全出清整列刪除抽成正式函式</b> <code>delete_stock_rows()</code>：禾伸堂（3026）賣光後從 <code>03_持股總表</code>／<code>05_個股分析</code>／<code>13_加碼分析</code> 整列刪除，全檔 <b>9 張分頁</b>的跨表引用一併位移（含先前沒遇過的 <code>09_壓力測試</code> 20 處）。第四次手工做這件事後抽成函式並附四則血淚註解。<b>過程中踩到新坑</b>：共用公式的從屬格是自閉合 <code>&lt;f t="shared" si="1"/&gt;</code>，被當成開標籤後 lazy 比對會跨過數個儲存格，把已位移過的編號再減一次，導致兩列塌成同一列——已加負向前瞻並補回歸測試</td>
