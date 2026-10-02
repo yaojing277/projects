@@ -1,19 +1,19 @@
 [
  {
   "target_date": "2026/10/02",
-  "ran_at": "2026/10/02 18:56",
-  "trigger": "手動",
+  "ran_at": "2026/10/02 20:58",
+  "trigger": "排程",
   "mode": "更新股價＋同步＋全分頁",
-  "status": "success",
+  "status": "failure",
   "steps": [
-   "更新股價（快照滾動）：success",
-   "同步股價 Wealth OS：success",
-   "國泰漲跌：success",
-   "ETF 除息日同步日曆：success",
-   "跌幅查詢頁資料：success",
-   "正二分析部署：success"
+   "更新股價（快照滾動）：failure",
+   "同步股價 Wealth OS：skipped",
+   "國泰漲跌：skipped",
+   "ETF 除息日同步日曆：skipped",
+   "跌幅查詢頁資料：skipped",
+   "正二分析部署：skipped"
   ],
-  "run_url": "https://github.com/yaojing277/stock-notify/actions/runs/36997911813"
+  "run_url": "https://github.com/yaojing277/stock-notify/actions/runs/37009886174"
  },
  {
   "target_date": "2026/10/01",
