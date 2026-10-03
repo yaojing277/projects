@@ -45,6 +45,40 @@ pre{background:#0f172a;color:#e2e8f0;padding:12px 16px;border-radius:8px;overflo
 <code>wealth_sync.yml</code> 排程在這段期間的開發、修 bug 與持股維護操作。維護的雲端檔案是
 <code>Jimmy_Wealth_OS_Master_V4.4_Google.xlsm</code>（Google Drive，就地覆蓋、檔案 ID 不變）。</div>
 
+<h2>2026-10-03　報酬日曆標題改版：配色、格式、字級、置中</h2>
+<p><b>需求：</b>Jimmy 反映報酬日曆標題（A:C 合併那格）的黃底太刺眼，要求「背景更淡、字體用對比色，
+而且在 iPhone 暗色主題下開啟也要很清楚」。隨後再追加：文字格式改成 <code>2026/09_報酬日曆</code>、
+字級稍微放大、文字在合併格內置中。</p>
+<p><b>實作：</b>四項都改在產生器（這兩張分頁每次同步都整張重建，手動改隔天就被蓋掉）：</p>
+<ul>
+<li><b>配色</b>：新增常數 <code>CAL_TITLE_FILL="FFF3C4"</code>／<code>CAL_TITLE_FONT="1E3A8A"</code>
+（原為純黃 <code>FFFF00</code>＋黑字）。藍是黃的補色，對比 9.3:1（WCAG AAA）。</li>
+<li><b>文字格式</b>：<code>f"{year}年{month}月報酬日曆"</code> → <code>f"{year}/{month:02d}_報酬日曆"</code>。</li>
+<li><b>字級</b>：10→12。<code>_ensure_font_color()</code> 原本不支援字級，新增選用參數
+<code>size</code>（有 <code>&lt;sz&gt;</code> 就換、沒有就插在最前面；不給則沿用原字級，
+故 <code>_fix_daily_value_style</code> 等其他呼叫端不受影響）。</li>
+<li><b>置中</b>：串接既有的 <code>_ensure_centered_style()</code>（每日表格標題用的同一支），
+接在填色／字型變體之後，不另寫對齊邏輯。</li>
+</ul>
+<p><b>踩坑與解法：</b></p>
+<ul>
+<li><b>「更淡」會讓暗色主題更刺眼——與直覺相反。</b>直接把黃色往白色調會提高亮度：純黃
+<code>#FFFF00</code> 的相對亮度已達 <b>0.928</b>，而看起來更淡的 <code>#FFF8E1</code> 是 <b>0.938</b>，
+<b>比原本還亮</b>，在深色背景上就是一塊更大的白斑。解法是<b>降飽和（視覺變淡）＋略降亮度</b>
+——<code>#FFF3C4</code> 亮度 0.893，比原本低。<b>「淡」要拆成飽和度與明度兩個維度來談，不能混為一談。</b></li>
+<li><b>暗色主題不會改寫明確指定的顏色</b>，只影響沒設定顏色的儲存格。所以這組配色在亮／暗模式下
+外觀一致，不會有「電腦好看、手機變樣」的問題——這點讓需求從「要能適應兩種主題」簡化成
+「挑一組兩邊都夠對比的顏色」。</li>
+<li><b>改標題文字前先確認沒有東西靠它定位。</b>全檔搜尋確認標題只在一處組字、無任何 regex 比對它。
+但有個相近字串刻意不動：長條圖標題 <code>YYYY年M月逐日損益(長條圖)</code> 被
+<code>_find_chart_by_marker()</code> 當作<b>內容指紋</b>用來定位圖表（Excel 會重新編號
+<code>chartN.xml</code>，不能靠檔名找），改掉會讓圖表定位失效。</li>
+</ul>
+<p><b>驗證結果：</b>以 WCAG 公式計算相對亮度與對比度（不是憑感覺挑色）；重建後下載雲端檔逐格檢查，
+<code>02_每日漲跌</code> 4 個、<code>03_國泰漲跌</code> 9 個共 <b>13 個標題</b>全部符合：
+文字 <code>\d{4}/\d{2}_報酬日曆</code>、字級 12、底 <code>FFF3C4</code>、字 <code>1E3A8A</code>、
+水平置中，舊格式零殘留。另產出亮／暗兩種主題的對照圖供 Jimmy 目視確認。</p>
+
 <h2>2026-10-02　新增「正二曝險上限」門檻，並讓選用參數缺值不再拖垮排程</h2>
 <p><b>需求：</b>Jimmy 表示會<b>逐步賣掉個股、轉買正二 ETF</b>，要求比例一併更新。追查既有門檻時發現
 <code>12_設定</code> B13「正二目標上限」60% 管的是<b>占股票市值</b>（目前 28.4%），

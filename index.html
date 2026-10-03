@@ -959,7 +959,11 @@
       <tbody>
         <tr>
           <td style="white-space:nowrap; color:var(--text3);">2026-10-03</td>
-          <td>⌨️ <b>MouseSideKey 新增選用模組：Claude 快捷鍵 ⌥Q</b>：一鍵切到 Claude App → 點擊輸入框 → 送出 → 方向鍵 → 1 秒後 Enter（本體 <code>claude_hotkey.lua</code>，symlink 到 <code>~/.hammerspoon/</code>）。<code>init.lua</code> 改為<b>檔案存在才載入</b>、<code>pcall</code> 隔離錯誤，不影響側鍵功能，重裝不再遺失。踩坑：<code>hs.timer.doAfter</code> 未保留參照會被 GC 回收而不觸發；按鍵改送前景視窗（Electron 收不到 <code>postToApplication</code>）</td>
+          <td>🎨 <b>報酬日曆標題改版</b>（<code>02_每日漲跌</code>／<code>03_國泰漲跌</code> 共 13 個）：文字 <code>2026年9月報酬日曆</code> → <code>2026/09_報酬日曆</code>、字級 10→12、合併格內水平置中；配色由純黃 <code>#FFFF00</code>＋黑字改為 <code>#FFF3C4</code> 淡琥珀＋<code>#1E3A8A</code> 深藍（黃的補色），對比 9.3:1。<b>反直覺處</b>：「更淡」通常等於更接近白色、亮度更高——<code>#FFF8E1</code> 亮度 0.938 比原本純黃的 0.928 還亮，在 iPhone 暗色主題下反而是更刺眼的白斑，故改採<b>降飽和＋略降亮度</b>（0.893）</td>
+        </tr>
+        <tr>
+          <td style="white-space:nowrap; color:var(--text3);">2026-10-03</td>
+          <td>⌨️ <b>MouseSideKey 新增選用模組：Claude 快捷鍵 ⌥Q</b>：一鍵切到 Claude App → 點擊輸入框 → 送出 → 方向鍵 → 0.3 秒後 Enter（本體 <code>claude_hotkey.lua</code> 收進 <code>mouse-side-key</code> repo，<code>install.command</code> 一併安裝；延遲調為切換 0.2 秒、→ 與 Enter 間 0.3 秒，全程約 0.7 秒）。<code>init.lua</code> 改為<b>檔案存在才載入</b>、<code>pcall</code> 隔離錯誤，不影響側鍵功能，重裝不再遺失。踩坑：<code>hs.timer.doAfter</code> 未保留參照會被 GC 回收而不觸發；按鍵改送前景視窗（Electron 收不到 <code>postToApplication</code>）</td>
         </tr>
         <tr>
           <td style="white-space:nowrap; color:var(--text3);">2026-10-03</td>
