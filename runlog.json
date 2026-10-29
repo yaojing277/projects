@@ -1,8 +1,8 @@
 [
  {
   "target_date": "2026/10/29",
-  "ran_at": "2026/10/29 14:35",
-  "trigger": "手動",
+  "ran_at": "2026/10/29 21:04",
+  "trigger": "排程",
   "mode": "更新股價＋同步＋全分頁",
   "status": "success",
   "steps": [
@@ -19,7 +19,7 @@
    "複委託：success",
    "國泰報酬：success"
   ],
-  "run_url": "https://github.com/yaojing277/stock-notify/actions/runs/40829575705"
+  "run_url": "https://github.com/yaojing277/stock-notify/actions/runs/40877855782"
  },
  {
   "target_date": "2026/10/28",
