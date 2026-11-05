@@ -1,25 +1,25 @@
 [
  {
   "target_date": "2026/11/05",
-  "ran_at": "2026/11/05 20:41",
-  "trigger": "手動",
+  "ran_at": "2026/11/05 22:41",
+  "trigger": "排程",
   "mode": "更新股價＋同步＋全分頁",
-  "status": "success",
+  "status": "failure",
   "steps": [
    "更新股價（快照滾動）：success",
-   "同步股價 Wealth OS：success",
-   "國泰漲跌：success",
-   "除息日同步日曆（ETF＋個股）：success",
-   "跌幅查詢頁資料：success",
-   "正二分析部署：success",
+   "同步股價 Wealth OS：failure",
+   "國泰漲跌：skipped",
+   "除息日同步日曆（ETF＋個股）：skipped",
+   "跌幅查詢頁資料：skipped",
+   "正二分析部署：skipped",
    "加碼損益：success",
    "加碼報告雲端硬碟：success",
    "第二波加碼報告雲端硬碟：success",
-   "資金來源：success",
+   "資金來源：skipped",
    "複委託：success",
-   "國泰報酬：success"
+   "國泰報酬：skipped"
   ],
-  "run_url": "https://github.com/yaojing277/stock-notify/actions/runs/42028549906"
+  "run_url": "https://github.com/yaojing277/stock-notify/actions/runs/42046936232"
  },
  {
   "target_date": "2026/11/04",
