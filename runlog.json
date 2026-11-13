@@ -1,7 +1,7 @@
 [
  {
   "target_date": "2026/11/13",
-  "ran_at": "2026/11/13 14:36",
+  "ran_at": "2026/11/13 20:25",
   "trigger": "手動",
   "mode": "更新股價＋同步＋全分頁",
   "status": "success",
@@ -17,9 +17,9 @@
    "第二波加碼報告雲端硬碟：success",
    "資金來源：success",
    "複委託：success",
-   "國泰報酬：failure"
+   "國泰報酬：success"
   ],
-  "run_url": "https://github.com/yaojing277/stock-notify/actions/runs/43379128216"
+  "run_url": "https://github.com/yaojing277/stock-notify/actions/runs/43424368330"
  },
  {
   "target_date": "2026/11/12",
